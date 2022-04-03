@@ -1,1 +1,3 @@
-This repository holds the files for libgdx game called CocoRun
+This repository is for my Software Engineering module assignment
+
+It contains a libgdx game for an endless runner game
