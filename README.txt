@@ -1,3 +1,1 @@
-Github test
-
-This sentence was added through github!
+This repository holds the files for libgdx game called CocoRun
