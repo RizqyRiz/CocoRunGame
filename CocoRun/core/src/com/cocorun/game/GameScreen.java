@@ -36,8 +36,12 @@ public class GameScreen implements Screen {
 	//used to check for game state
 	private boolean paused;
 	
-	//will be used to keep track of time
+	//will be used to keep track of time and points
 	private float timeElapsed;
+	private int points;
+	private int seconds;
+	private int minutes;
+	private int tempTimeCounter = 0;
 	
 	private Random rand = new Random();
 	
@@ -54,6 +58,8 @@ public class GameScreen implements Screen {
 		viewport = new StretchViewport(camera.viewportWidth, camera.viewportHeight);
 		viewport.setCamera(camera);
 		
+		
+		//configure lane coordinates
 		topLane = (int)(camera.viewportHeight*0.5);
 		midLane = (int)(camera.viewportHeight*0.7);
 		botLane = (int)(camera.viewportHeight*0.9);
@@ -65,8 +71,10 @@ public class GameScreen implements Screen {
 		int playerX = (int)(camera.viewportWidth*0.05);
 		coconut = new Player(playerX,midLane);
 		
-		//initialize time elapsed since the game session starts
+		//initialize time elapsed and game timer since the game session starts
 		timeElapsed = 0f;
+		seconds = 0;
+		minutes = 0;
 		
 		//initialize the obstacles array list and starts spawning them
 		obstacles = new ArrayList<Obstacle>();
@@ -108,7 +116,7 @@ public class GameScreen implements Screen {
 			}
 		} else {
 			generalUpdate();
-			System.out.println(timeElapsed);
+			System.out.println(seconds);
 		}
 		
 		//resizes the SpriteBatch to the screen size we set it, in this case 1920 x 1080
@@ -121,6 +129,9 @@ public class GameScreen implements Screen {
 					batch.draw(obstacle.sprite, obstacle.bounds.x, obstacle.bounds.y);
 				}
 				batch.draw(coconut.sprite, coconut.bounds.x, coconut.bounds.y);
+				Assets.font.draw(batch, "Time: " + String.format("%02d",minutes) + ":" + String.format("%02d",seconds), (float)(camera.viewportWidth/2.35), 30);
+				//Assets.font.draw(batch, "Time: " + Float.toString(timeElapsed), (float)(camera.viewportWidth/2.35), 30);
+				Assets.font.draw(batch, "Points earned: " + points, 10, 30);
 				if(paused) {
 					
 				}
@@ -130,6 +141,13 @@ public class GameScreen implements Screen {
 	//updates the SpriteBatch objects in the canvas 
 	public void generalUpdate() {
 		timeElapsed += Gdx.graphics.getDeltaTime();
+		points = (int)(timeElapsed * 50);
+		int tempSeconds = (int)timeElapsed;
+		if(tempSeconds != 0 && tempSeconds%59 == 0) {
+			seconds = tempSeconds;
+			tempTimeCounter += 1;
+			minutes = tempTimeCounter/60;
+		}
 		
 		// configure pause button
 		if(Gdx.input.isKeyJustPressed(Keys.ESCAPE)) {
@@ -178,7 +196,7 @@ public class GameScreen implements Screen {
 			
 			//calculate speed increase over time
 			float baseSpeed = 5;		//set initial speed to 5 meters (pixel) per second
-			float maxSpeed = 30;	//set speed limit to 30 meters (pixel) per second
+			float maxSpeed = 40;	//set speed limit to 30 meters (pixel) per second
 			float displacement = baseSpeed + modLinear;
 			if(displacement > maxSpeed) {
 				displacement = maxSpeed;
@@ -193,7 +211,7 @@ public class GameScreen implements Screen {
 			if (obstacle.bounds.overlaps(coconut.bounds)) {
 				//dropsGathered++;
 				//dropSound.play();
-				paused = true;
+				//paused = true;
 				//iter.remove();
 				//game.setScreen(new MainMenuScreen(game));
 				//dispose();

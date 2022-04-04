@@ -1,6 +1,7 @@
 package com.cocorun.game;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -43,7 +44,15 @@ public class Assets {
 		/*
 		 * Configures the font we'll be using
 		 */
-		FreeTypeFontGenerator font = new FreeTypeFontGenerator(Gdx.files.internal("Montserrat-Regular.ttf"));
+		FreeTypeFontGenerator gen = new FreeTypeFontGenerator(Gdx.files.internal("Montserrat-Regular.ttf"));
+		FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+		parameter.size = 32;
+		parameter.color = Color.valueOf("ffffff");
+		parameter.borderWidth = 1;
+		parameter.flip = true;
+		font = gen.generateFont(parameter);
+		font.getRegion().getTexture().setFilter(TextureFilter.Linear, TextureFilter.Linear);
+		
 		
 		/*
 		 * loads background image for in-game view
