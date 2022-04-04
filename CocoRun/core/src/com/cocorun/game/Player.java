@@ -1,5 +1,6 @@
 package com.cocorun.game;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Rectangle;
 
@@ -20,7 +21,7 @@ public class Player {
 		/*
 		 *  generates and store the player character's hit box
 		 */
-		bounds = new Rectangle(initialPosX, initialPosY, 32, 32);
+		bounds = new Rectangle(initialPosX, initialPosY, 42, 42);
 	}
 	
 }

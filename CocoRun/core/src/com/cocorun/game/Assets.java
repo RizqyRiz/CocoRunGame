@@ -48,7 +48,7 @@ public class Assets {
 		/*
 		 * loads background image for in-game view
 		 */
-		bgImage = new Texture(Gdx.files.internal("background-cocorun.jpeg"));
+		bgImage = new Texture(Gdx.files.internal("background-cocorun.png"));
 		//used so that the image isn't messed up when scaling
 		bgImage.setFilter(TextureFilter.Linear, TextureFilter.Linear );	
 		//converts the texture into a sprite which helps load faster
@@ -59,7 +59,7 @@ public class Assets {
 		/*
 		 * loads player textures and sprite
 		 */
-		coconutImage = new Texture(Gdx.files.internal("coconut.png"));
+		coconutImage = new Texture(Gdx.files.internal("coconut64.png"));
 		coconutImage.setFilter(TextureFilter.Linear, TextureFilter.Linear );	
 		coconutSprite = new Sprite(coconutImage);
 		coconutSprite.flip(false, true);

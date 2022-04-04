@@ -1,5 +1,6 @@
 package com.cocorun.game;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Rectangle;
 
@@ -11,7 +12,7 @@ public class Obstacle {
 	/*
 	 *  instantiating obstacles object with a sprite and bounds stored as a Rectangle object
 	 */
-	public Obstacle(int initialPosY, int type) {
+	public Obstacle(int initialPosX, int initialPosY, int type) {
 		/*
 		 * random generated integer between 0-2 is
 		 * passed through the constructor and used
@@ -26,7 +27,7 @@ public class Obstacle {
 		/*
 		 *  generates and store the obstacle's hit box
 		 */
-		bounds = new Rectangle(800, initialPosY, 64, 64);
+		bounds = new Rectangle(Gdx.graphics.getWidth(), initialPosY, 64, 64);
 	}
 
 }

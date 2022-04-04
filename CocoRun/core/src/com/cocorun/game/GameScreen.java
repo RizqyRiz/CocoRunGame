@@ -29,9 +29,9 @@ public class GameScreen implements Screen {
 	private List<Obstacle> obstacles;
 	private long lastObsTime;
 	
-	private int topLane = 240;	//480*0.5
-	private int midLane = 336;	//480*0.7
-	private int botLane = 432;	//480*0.9
+	private int topLane; //= 240;	//480*0.5
+	private int midLane; //= 336;	//480*0.7
+	private int botLane; //= 432;	//480*0.9
 	
 	//used to check for game state
 	private boolean paused;
@@ -48,17 +48,22 @@ public class GameScreen implements Screen {
 		//setToOrtho(true) = most graphics processor axis (y-axis: top -> bottom)
 		//if set to false, make sure to flip your Textures and/or Sprite as well
 		camera = new OrthographicCamera();
-		camera.setToOrtho(true,800,480);
+		camera.setToOrtho(true,1386, 756);
 		
 		//sets the background to fit the window size
-		viewport = new StretchViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+		viewport = new StretchViewport(camera.viewportWidth, camera.viewportHeight);
 		viewport.setCamera(camera);;
+		
+		topLane = (int)(camera.viewportHeight*0.5);
+		midLane = (int)(camera.viewportHeight*0.7);
+		botLane = (int)(camera.viewportHeight*0.9);
 		
 		//create the SpriteBatch 
 		batch = new SpriteBatch();
 		
-		//spawns the player on the middle lane, 20px to right of the window
-		coconut = new Player(20, midLane);
+		//spawns the player on the middle lane
+		int playerX = (int)(camera.viewportWidth*0.05);
+		coconut = new Player(playerX,midLane);
 		
 		//initialize time elapsed since the game session starts
 		timeElapsed = 0f;
@@ -71,12 +76,13 @@ public class GameScreen implements Screen {
 	private void spawnObstacles() {
 		//randomizes the position the obstacles will spawn on and instantiating the obstacle object
 		int randomLane = rand.nextInt(3);
+		int obsX = (int)camera.viewportWidth+50;
 		if(randomLane == 2)
-			obstacle = new Obstacle(topLane, rand.nextInt(3));
+			obstacle = new Obstacle(obsX, topLane, rand.nextInt(3));
 		else if (randomLane == 1) 
-			obstacle = new Obstacle(midLane - 10, rand.nextInt(3));
+			obstacle = new Obstacle(obsX, midLane - 10, rand.nextInt(3));
 		else
-			obstacle = new Obstacle(botLane - 15, rand.nextInt(3));
+			obstacle = new Obstacle(obsX, botLane - 15, rand.nextInt(3));
 
 		//store the objects instantiated into the array list
 		obstacles.add(obstacle);
@@ -187,7 +193,7 @@ public class GameScreen implements Screen {
 			if (obstacle.bounds.overlaps(coconut.bounds)) {
 				//dropsGathered++;
 				//dropSound.play();
-				//paused = true;
+				paused = true;
 				//iter.remove();
 				//game.setScreen(new MainMenuScreen(game));
 				//dispose();
