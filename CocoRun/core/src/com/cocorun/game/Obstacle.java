@@ -27,7 +27,7 @@ public class Obstacle {
 		/*
 		 *  generates and store the obstacle's hit box
 		 */
-		bounds = new Rectangle(Gdx.graphics.getWidth(), initialPosY, 64, 64);
+		bounds = new Rectangle(initialPosX, initialPosY, 64, 64);
 	}
 
 }

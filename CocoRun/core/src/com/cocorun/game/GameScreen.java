@@ -52,7 +52,7 @@ public class GameScreen implements Screen {
 		
 		//sets the background to fit the window size
 		viewport = new StretchViewport(camera.viewportWidth, camera.viewportHeight);
-		viewport.setCamera(camera);;
+		viewport.setCamera(camera);
 		
 		topLane = (int)(camera.viewportHeight*0.5);
 		midLane = (int)(camera.viewportHeight*0.7);
@@ -76,7 +76,7 @@ public class GameScreen implements Screen {
 	private void spawnObstacles() {
 		//randomizes the position the obstacles will spawn on and instantiating the obstacle object
 		int randomLane = rand.nextInt(3);
-		int obsX = (int)camera.viewportWidth+50;
+		int obsX = (int)camera.viewportWidth;
 		if(randomLane == 2)
 			obstacle = new Obstacle(obsX, topLane, rand.nextInt(3));
 		else if (randomLane == 1) 
