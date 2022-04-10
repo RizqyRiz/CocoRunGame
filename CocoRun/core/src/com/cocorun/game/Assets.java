@@ -1,6 +1,7 @@
 package com.cocorun.game;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
@@ -15,7 +16,11 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
  */
 
 public class Assets {
-	//fonts
+	//user settings setup
+	public static Preferences settings;
+	public static String name;
+	
+	//font setup
 	public static BitmapFont font;
 	
 	//background
@@ -41,6 +46,12 @@ public class Assets {
 	public static Sprite potholeSprite;
 	
 	public static void load() {
+		/*
+		 * Configure user settings preferences 
+		 */
+		settings = Gdx.app.getPreferences("settings");
+		name = settings.getString("name", "No name found");
+		
 		/*
 		 * Configures the font we'll be using
 		 */

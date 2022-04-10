@@ -7,7 +7,9 @@ import java.util.Random;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.Input.Peripheral;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
@@ -22,6 +24,11 @@ public class GameScreen implements Screen {
 	private SpriteBatch batch;
 	
 	private Viewport viewport;
+	
+	//file handling
+	private FileHandle scores;
+	private boolean isExtFree;
+	private boolean isLocFree;
 	
 	private Player coconut;
 	
@@ -43,7 +50,10 @@ public class GameScreen implements Screen {
 	private int minutes;
 	private int tempTimeCounter = 0;
 	
+	//randomizer setup
 	private Random rand = new Random();
+	
+	
 	
 	public GameScreen(CocoRunGame game) {
 		this.game = game;
@@ -58,8 +68,14 @@ public class GameScreen implements Screen {
 		viewport = new StretchViewport(camera.viewportWidth, camera.viewportHeight);
 		viewport.setCamera(camera);
 		
+		//isExtFree = Gdx.files.isExternalStorageAvailable();
+		//isLocFree = Gdx.files.isLocalStorageAvailable();
+		//scores = Gdx.files.external("scores.ccg");
+		//scores.writeBytes(new byte[] {20, 21, 22, 23}, false);
+		//scores.writeString("Hello", false);
+		//System.out.println(scores.readString());
 		
-		//configure lane coordinates
+		//configure lane coordinates based on window size
 		topLane = (int)(camera.viewportHeight*0.5);
 		midLane = (int)(camera.viewportHeight*0.7);
 		botLane = (int)(camera.viewportHeight*0.9);
@@ -116,7 +132,7 @@ public class GameScreen implements Screen {
 			}
 		} else {
 			generalUpdate();
-			System.out.println(seconds);
+			//System.out.println(seconds);
 		}
 		
 		//resizes the SpriteBatch to the screen size we set it, in this case 1920 x 1080
@@ -129,9 +145,10 @@ public class GameScreen implements Screen {
 					batch.draw(obstacle.sprite, obstacle.bounds.x, obstacle.bounds.y);
 				}
 				batch.draw(coconut.sprite, coconut.bounds.x, coconut.bounds.y);
-				Assets.font.draw(batch, "Time: " + String.format("%02d",minutes) + ":" + String.format("%02d",seconds), (float)(camera.viewportWidth/2.35), 30);
+				//Assets.font.draw(batch, "Time: " + String.format("%02d",minutes) + ":" + String.format("%02d",seconds), (float)(camera.viewportWidth/2.35), 30);
 				//Assets.font.draw(batch, "Time: " + Float.toString(timeElapsed), (float)(camera.viewportWidth/2.35), 30);
 				Assets.font.draw(batch, "Points earned: " + points, 10, 30);
+				//Assets.font.draw(batch, Assets.name, 100, 100);
 				if(paused) {
 					
 				}
@@ -143,11 +160,18 @@ public class GameScreen implements Screen {
 		timeElapsed += Gdx.graphics.getDeltaTime();
 		points = (int)(timeElapsed * 50);
 		int tempSeconds = (int)timeElapsed;
-		if(tempSeconds != 0 && tempSeconds%59 == 0) {
+		
+		/*
+		Assets.settings.putString("name", "Danial");
+		Assets.settings.flush();
+		Assets.name = Assets.settings.getString("name", "No name found");
+		*/
+		
+		/*if(tempSeconds != 0 && tempSeconds%59 == 0) {
 			seconds = tempSeconds;
 			tempTimeCounter += 1;
 			minutes = tempTimeCounter/60;
-		}
+		}*/
 		
 		// configure pause button
 		if(Gdx.input.isKeyJustPressed(Keys.ESCAPE)) {
@@ -209,6 +233,7 @@ public class GameScreen implements Screen {
 				iter.remove();
 			}
 			if (obstacle.bounds.overlaps(coconut.bounds)) {
+				System.out.println("Collision detected");
 				//dropsGathered++;
 				//dropSound.play();
 				//paused = true;
