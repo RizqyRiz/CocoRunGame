@@ -16,12 +16,25 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
  */
 
 public class Assets {
-	//user settings setup
-	public static Preferences settings;
-	public static String name;
 	
 	//font setup
 	public static BitmapFont font;
+	
+	//inactive buttons
+	public static Texture playBtnImg;
+	public static Texture resumeBtnImg;
+	public static Texture exitBtnImg;
+	public static Sprite playBtnSprite;
+	public static Sprite resumeBtnSprite;
+	public static Sprite exitBtnSprite;
+	
+	//active buttons
+	public static Texture playActiveBtnImg;
+	public static Texture resumeActiveBtnImg;
+	public static Texture exitActiveBtnImg;
+	public static Sprite playActiveBtnSprite;
+	public static Sprite resumeActiveBtnSprite;
+	public static Sprite exitActiveBtnSprite;
 	
 	//background
 	public static Texture bgImage;
@@ -46,11 +59,6 @@ public class Assets {
 	public static Sprite potholeSprite;
 	
 	public static void load() {
-		/*
-		 * Configure user settings preferences 
-		 */
-		settings = Gdx.app.getPreferences("settings");
-		name = settings.getString("name", "No name found");
 		
 		/*
 		 * Configures the font we'll be using
@@ -60,11 +68,31 @@ public class Assets {
 		parameter.size = 32;
 		parameter.color = Color.valueOf("ffffff");
 		parameter.borderWidth = 1;
-		parameter.flip = true;
 		font = gen.generateFont(parameter);
 		font.getRegion().getTexture().setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		
+		/*
+		 * loads inactive menu buttons
+		 */
+		playBtnImg = new Texture(Gdx.files.internal("Buttons/play.png"));
+		playBtnImg.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+		playBtnSprite = new Sprite(playBtnImg);
 		
+		exitBtnImg = new Texture(Gdx.files.internal("Buttons/exit.png"));
+		exitBtnImg.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+		exitBtnSprite = new Sprite(exitBtnImg);
+		
+		/*
+		 * loads active menu buttons
+		 */
+		playActiveBtnImg = new Texture(Gdx.files.internal("Buttons/playActive.png"));
+		playActiveBtnImg.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+		playActiveBtnSprite = new Sprite(playActiveBtnImg);
+		
+		exitActiveBtnImg = new Texture(Gdx.files.internal("Buttons/exitActive.png"));
+		exitActiveBtnImg.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+		exitActiveBtnSprite = new Sprite(exitActiveBtnImg);
+
 		/*
 		 * loads background image for in-game view
 		 */
@@ -73,8 +101,6 @@ public class Assets {
 		bgImage.setFilter(TextureFilter.Linear, TextureFilter.Linear );	
 		//converts the texture into a sprite which helps load faster
 		bgSprite = new Sprite(bgImage);
-		//flips the y-axis of the sprite
-		bgSprite.flip(false, true);
 		
 		/*
 		 * loads player textures and sprite
@@ -82,7 +108,6 @@ public class Assets {
 		coconutImage = new Texture(Gdx.files.internal("coconut64.png"));
 		coconutImage.setFilter(TextureFilter.Linear, TextureFilter.Linear );	
 		coconutSprite = new Sprite(coconutImage);
-		coconutSprite.flip(false, true);
 		
 		/*
 		 * loads obstacles textures and sprite
@@ -90,17 +115,14 @@ public class Assets {
 		carImage = new Texture(Gdx.files.internal("Car.png"));
 		carImage.setFilter(TextureFilter.Linear, TextureFilter.Linear );	
 		carSprite = new Sprite(carImage);
-		carSprite.flip(false, true);
 		
 		boulderImage = new Texture(Gdx.files.internal("Boulder.png"));
 		boulderImage.setFilter(TextureFilter.Linear, TextureFilter.Linear );	
 		boulderSprite = new Sprite(boulderImage);
-		boulderSprite.flip(false, true);
 		
 		potholeImage = new Texture(Gdx.files.internal("Pothole.png"));
 		potholeImage.setFilter(TextureFilter.Linear, TextureFilter.Linear );	
 		potholeSprite = new Sprite(potholeImage);
-		potholeSprite.flip(false, true);
 		
 		/*
 		 * loads background textures and sprite
@@ -108,12 +130,10 @@ public class Assets {
 		treeImage = new Texture(Gdx.files.internal("Tree.png"));
 		treeImage.setFilter(TextureFilter.Linear, TextureFilter.Linear );	
 		treeSprite = new Sprite(treeImage);
-		treeSprite.flip(false, true);
 		
 		cloudImage = new Texture(Gdx.files.internal("Cloud.png"));
 		cloudImage.setFilter(TextureFilter.Linear, TextureFilter.Linear );	
 		cloudSprite = new Sprite(cloudImage);
-		cloudSprite.flip(false, true);
 	}
 	
 }

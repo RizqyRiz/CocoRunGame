@@ -7,9 +7,7 @@ import java.util.Random;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.Input.Peripheral;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
@@ -24,11 +22,6 @@ public class GameScreen implements Screen {
 	private SpriteBatch batch;
 	
 	private Viewport viewport;
-	
-	//file handling
-	private FileHandle scores;
-	private boolean isExtFree;
-	private boolean isLocFree;
 	
 	private Player coconut;
 	
@@ -46,9 +39,9 @@ public class GameScreen implements Screen {
 	//will be used to keep track of time and points
 	private float timeElapsed;
 	private int points;
-	private int seconds;
-	private int minutes;
-	private int tempTimeCounter = 0;
+	//private int seconds;
+	//private int minutes;
+	//private int tempTimeCounter = 0;
 	
 	//randomizer setup
 	private Random rand = new Random();
@@ -58,27 +51,22 @@ public class GameScreen implements Screen {
 	public GameScreen(CocoRunGame game) {
 		this.game = game;
 		
-		//setToOrtho(false) = mathematical axis (y-axis: bottom -> top)
-		//setToOrtho(true) = most graphics processor axis (y-axis: top -> bottom)
-		//if set to false, make sure to flip your Textures and/or Sprite as well
+		/*
+		 * setToOrtho(false) = mathematical axis (y-axis: bottom -> top)
+		 * setToOrtho(true) = most graphics processor axis (y-axis: top -> bottom)
+		 * if set to false, make sure to flip your Textures and/or Sprite as well
+		 */
 		camera = new OrthographicCamera();
-		camera.setToOrtho(true,1386, 756);
+		camera.setToOrtho(false,1386, 756);
 		
 		//sets the background to fit the window size
 		viewport = new StretchViewport(camera.viewportWidth, camera.viewportHeight);
 		viewport.setCamera(camera);
 		
-		//isExtFree = Gdx.files.isExternalStorageAvailable();
-		//isLocFree = Gdx.files.isLocalStorageAvailable();
-		//scores = Gdx.files.external("scores.ccg");
-		//scores.writeBytes(new byte[] {20, 21, 22, 23}, false);
-		//scores.writeString("Hello", false);
-		//System.out.println(scores.readString());
-		
 		//configure lane coordinates based on window size
-		topLane = (int)(camera.viewportHeight*0.5);
-		midLane = (int)(camera.viewportHeight*0.7);
-		botLane = (int)(camera.viewportHeight*0.9);
+		topLane = (int)(camera.viewportHeight*0.4);
+		midLane = (int)(camera.viewportHeight*0.2) + 10;
+		botLane = 15; 
 		
 		//create the SpriteBatch 
 		batch = new SpriteBatch();
@@ -89,8 +77,8 @@ public class GameScreen implements Screen {
 		
 		//initialize time elapsed and game timer since the game session starts
 		timeElapsed = 0f;
-		seconds = 0;
-		minutes = 0;
+		//seconds = 0;
+		//minutes = 0;
 		
 		//initialize the obstacles array list and starts spawning them
 		obstacles = new ArrayList<Obstacle>();
@@ -102,11 +90,11 @@ public class GameScreen implements Screen {
 		int randomLane = rand.nextInt(3);
 		int obsX = (int)camera.viewportWidth;
 		if(randomLane == 2)
-			obstacle = new Obstacle(obsX, topLane, rand.nextInt(3));
+			obstacle = new Obstacle(obsX, topLane, 0);//rand.nextInt(3));
 		else if (randomLane == 1) 
-			obstacle = new Obstacle(obsX, midLane - 10, rand.nextInt(3));
+			obstacle = new Obstacle(obsX, midLane, 0);//rand.nextInt(3));
 		else
-			obstacle = new Obstacle(obsX, botLane - 15, rand.nextInt(3));
+			obstacle = new Obstacle(obsX, botLane, 0);//rand.nextInt(3));
 
 		//store the objects instantiated into the array list
 		obstacles.add(obstacle);
@@ -147,8 +135,8 @@ public class GameScreen implements Screen {
 				batch.draw(coconut.sprite, coconut.bounds.x, coconut.bounds.y);
 				//Assets.font.draw(batch, "Time: " + String.format("%02d",minutes) + ":" + String.format("%02d",seconds), (float)(camera.viewportWidth/2.35), 30);
 				//Assets.font.draw(batch, "Time: " + Float.toString(timeElapsed), (float)(camera.viewportWidth/2.35), 30);
-				Assets.font.draw(batch, "Points earned: " + points, 10, 30);
-				//Assets.font.draw(batch, Assets.name, 100, 100);
+				Assets.font.draw(batch, "Points earned: " + points, 10, camera.viewportHeight - 30);
+				
 				if(paused) {
 					
 				}
@@ -220,7 +208,7 @@ public class GameScreen implements Screen {
 			
 			//calculate speed increase over time
 			float baseSpeed = 5;		//set initial speed to 5 meters (pixel) per second
-			float maxSpeed = 40;	//set speed limit to 30 meters (pixel) per second
+			float maxSpeed = 80;	//set speed limit to 30 meters (pixel) per second
 			float displacement = baseSpeed + modLinear;
 			if(displacement > maxSpeed) {
 				displacement = maxSpeed;
@@ -229,11 +217,15 @@ public class GameScreen implements Screen {
 			//moves the obstacles towards the player (from right to left of screen)
 			obstacle.bounds.x -=  displacement;//displacement; 
 			if (obstacle.bounds.x + 64 < 0) {
-				//removes the obstacle once it misses the player and  hits the left side of the screen
+				/*
+				 * removes the obstacle once it misses the player and  hits the left side of the screen
+				 */
 				iter.remove();
 			}
 			if (obstacle.bounds.overlaps(coconut.bounds)) {
 				System.out.println("Collision detected");
+				game.setScreen(new GameOverScreen(game,points));
+				dispose();
 				//dropsGathered++;
 				//dropSound.play();
 				//paused = true;
@@ -251,7 +243,7 @@ public class GameScreen implements Screen {
 	}
 	
 	@Override
-	//Executes once only (useful for game openining screen etc
+	//Executes once only (useful for game opening screen etc
 	public void show() {
 	}
 	

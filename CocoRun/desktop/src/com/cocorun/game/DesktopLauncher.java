@@ -10,8 +10,9 @@ public class DesktopLauncher {
 		Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
 		config.setTitle("CocoRun");
 		config.setForegroundFPS(60);
-		config.useOpenGL3(false,4, 2);
+		config.useOpenGL3(true,4, 2);
 		config.setWindowedMode(1344, 756);
+		config.setResizable(false);
 		new Lwjgl3Application(new CocoRunGame(), config);
 	}
 }
