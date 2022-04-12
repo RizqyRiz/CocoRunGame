@@ -8,8 +8,12 @@ import java.util.Random;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
@@ -20,6 +24,7 @@ public class GameScreen implements Screen {
 	private CocoRunGame game;
 	private OrthographicCamera camera;
 	private SpriteBatch batch;
+	private ShapeRenderer shape;
 	
 	private Viewport viewport;
 	
@@ -29,9 +34,9 @@ public class GameScreen implements Screen {
 	private List<Obstacle> obstacles;
 	private long lastObsTime;
 	
-	private int topLane; //= 240;	//480*0.5
-	private int midLane; //= 336;	//480*0.7
-	private int botLane; //= 432;	//480*0.9
+	private int topLane; 
+	private int midLane; 
+	private int botLane; 
 	
 	//used to check for game state
 	private boolean paused;
@@ -39,13 +44,12 @@ public class GameScreen implements Screen {
 	//will be used to keep track of time and points
 	private float timeElapsed;
 	private int points;
-	//private int seconds;
-	//private int minutes;
-	//private int tempTimeCounter = 0;
 	
 	//randomizer setup
 	private Random rand = new Random();
 	
+	private static final int btnWidth = 192;
+	private static final int btnHeight = 108;
 	
 	
 	public GameScreen(CocoRunGame game) {
@@ -77,14 +81,13 @@ public class GameScreen implements Screen {
 		
 		//initialize time elapsed and game timer since the game session starts
 		timeElapsed = 0f;
-		//seconds = 0;
-		//minutes = 0;
 		
 		//initialize the obstacles array list and starts spawning them
 		obstacles = new ArrayList<Obstacle>();
 		spawnObstacles();
 	}
 	
+	//handles obstacle instantiations
 	private void spawnObstacles() {
 		//randomizes the position the obstacles will spawn on and instantiating the obstacle object
 		int randomLane = rand.nextInt(3);
@@ -112,7 +115,7 @@ public class GameScreen implements Screen {
 		
 		camera.update();
 		
-		// handles what happens in each game state
+		// handles what happens when the game is or isn't paused
 		if(paused) {
 			if(Gdx.input.isKeyJustPressed(Keys.ESCAPE)) {
 				System.out.println("RESUME");
@@ -120,11 +123,13 @@ public class GameScreen implements Screen {
 			}
 		} else {
 			generalUpdate();
-			//System.out.println(seconds);
 		}
 		
-		//resizes the SpriteBatch to the screen size we set it, in this case 1920 x 1080
+		//resizes the SpriteBatch to the screen size we set it
 		batch.setProjectionMatrix(camera.combined);
+		
+		//enable alpha
+		//batch.enableBlending();
 		
 		//starts drawing the SpriteBatch into the canvas
 		batch.begin();
@@ -133,11 +138,36 @@ public class GameScreen implements Screen {
 					batch.draw(obstacle.sprite, obstacle.bounds.x, obstacle.bounds.y);
 				}
 				batch.draw(coconut.sprite, coconut.bounds.x, coconut.bounds.y);
-				//Assets.font.draw(batch, "Time: " + String.format("%02d",minutes) + ":" + String.format("%02d",seconds), (float)(camera.viewportWidth/2.35), 30);
-				//Assets.font.draw(batch, "Time: " + Float.toString(timeElapsed), (float)(camera.viewportWidth/2.35), 30);
 				Assets.font.draw(batch, "Points earned: " + points, 10, camera.viewportHeight - 30);
 				
 				if(paused) {
+					batch.draw(Assets.darkAlphaSprite, 0, 0);
+					Assets.font.draw(batch, "Points earned: " + points, 10, camera.viewportHeight - 30);
+					GlyphLayout pauseTextLayout = new GlyphLayout(Assets.font, "PAUSED", Color.WHITE, 0, Align.center, false);
+					Assets.font.draw(batch, pauseTextLayout, camera.viewportWidth / 2, camera.viewportHeight / 2 + btnHeight / 2 + 74);
+					
+					float btnX = (camera.viewportWidth / 2 - btnWidth / 2);
+					float playBtnY = (float)(camera.viewportHeight * 0.4);
+					float exitBtnY = (float)(camera.viewportHeight * 0.2);
+					
+					if (Gdx.input.getX() < btnX + btnWidth && Gdx.input.getX() > btnX && camera.viewportHeight - Gdx.input.getY() < playBtnY + btnHeight &&  camera.viewportHeight - Gdx.input.getY() > playBtnY) {
+						batch.draw(Assets.resumeActiveBtnSprite, btnX, playBtnY, btnWidth, btnHeight);
+						if(Gdx.input.justTouched()) {
+							paused = false;
+						}
+					} else {
+						batch.draw(Assets.resumeBtnSprite, btnX, playBtnY, btnWidth, btnHeight);
+					}
+					
+					if (Gdx.input.getX() < btnX + btnWidth && Gdx.input.getX() > btnX && camera.viewportHeight - Gdx.input.getY() < exitBtnY + btnHeight &&  camera.viewportHeight - Gdx.input.getY() > exitBtnY) {
+						batch.draw(Assets.exitActiveBtnSprite, btnX, exitBtnY, btnWidth, btnHeight);
+						if(Gdx.input.justTouched()) {
+							game.setScreen(new MainMenuScreen(game, 0));
+							dispose();
+						}
+					} else {
+						batch.draw(Assets.exitBtnSprite, btnX, exitBtnY, btnWidth, btnHeight);
+					}
 					
 				}
 		batch.end();

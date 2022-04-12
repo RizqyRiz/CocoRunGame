@@ -40,6 +40,10 @@ public class Assets {
 	public static Texture bgImage;
 	public static Sprite bgSprite;
 	
+	//dark layer on pause
+	public static Texture darkAlphaImg;
+	public static Sprite darkAlphaSprite;
+	
 	//background objects
 	public static Texture treeImage;
 	public static Sprite treeSprite;
@@ -72,7 +76,7 @@ public class Assets {
 		font.getRegion().getTexture().setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		
 		/*
-		 * loads inactive menu buttons
+		 * loads inactive buttons
 		 */
 		playBtnImg = new Texture(Gdx.files.internal("Buttons/play.png"));
 		playBtnImg.setFilter(TextureFilter.Linear, TextureFilter.Linear);
@@ -82,8 +86,12 @@ public class Assets {
 		exitBtnImg.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		exitBtnSprite = new Sprite(exitBtnImg);
 		
+		resumeBtnImg = new Texture(Gdx.files.internal("Buttons/resume.png"));
+		resumeBtnImg.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+		resumeBtnSprite = new Sprite(resumeBtnImg);
+		
 		/*
-		 * loads active menu buttons
+		 * loads active buttons
 		 */
 		playActiveBtnImg = new Texture(Gdx.files.internal("Buttons/playActive.png"));
 		playActiveBtnImg.setFilter(TextureFilter.Linear, TextureFilter.Linear);
@@ -92,6 +100,10 @@ public class Assets {
 		exitActiveBtnImg = new Texture(Gdx.files.internal("Buttons/exitActive.png"));
 		exitActiveBtnImg.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		exitActiveBtnSprite = new Sprite(exitActiveBtnImg);
+		
+		resumeActiveBtnImg = new Texture(Gdx.files.internal("Buttons/resumeActive.png"));
+		resumeActiveBtnImg.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+		resumeActiveBtnSprite = new Sprite(resumeActiveBtnImg);
 
 		/*
 		 * loads background image for in-game view
@@ -101,6 +113,13 @@ public class Assets {
 		bgImage.setFilter(TextureFilter.Linear, TextureFilter.Linear );	
 		//converts the texture into a sprite which helps load faster
 		bgSprite = new Sprite(bgImage);
+		
+		/*
+		 * loads a darkened layer for pause screen
+		 */
+		darkAlphaImg = new Texture(Gdx.files.internal("black-alpha.png"));
+		darkAlphaImg.setFilter(TextureFilter.Linear, TextureFilter.Linear );	
+		darkAlphaSprite = new Sprite(darkAlphaImg);
 		
 		/*
 		 * loads player textures and sprite
