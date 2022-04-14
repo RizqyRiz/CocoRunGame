@@ -42,6 +42,7 @@ public class GameScreen implements Screen {
 	//will be used to keep track of time and points
 	private float timeElapsed;
 	private int points;
+	private float spawnTime = 1000000000;
 	
 	//randomizer setup
 	private Random rand = new Random();
@@ -121,7 +122,7 @@ public class GameScreen implements Screen {
 			}
 		} else {
 			generalUpdate();
-			System.out.println(timeElapsed);
+			System.out.println(spawnTime);
 		}
 		
 		//resizes the SpriteBatch to the screen size we set it
@@ -208,14 +209,14 @@ public class GameScreen implements Screen {
 		 *   of in-game time and delay between each
 		 *   spawn is decreased over time
 		 */
-		float spawnMod = timeElapsed * 10000000;
-		float spawnTime = 500000000;
+		float spawnMod = TimeUtils.nanoTime() / 1000000;
 		spawnTime -= spawnMod;
-		if (spawnTime < 200000000) {
-			spawnTime = 200000000;
+		if (spawnTime < 300000000) {
+			spawnTime = 300000000;
 		}
-		if (TimeUtils.nanoTime() - lastObsTime > spawnTime)
+		if (TimeUtils.nanoTime() - lastObsTime > spawnTime) {
 			spawnObstacles();
+		}
 					
 		// looping through the obstacles array list and moving them
 		ListIterator<Obstacle> iter = obstacles.listIterator();
@@ -228,7 +229,7 @@ public class GameScreen implements Screen {
 			
 			//calculate speed increase over time
 			float baseSpeed = 5;		//set initial speed to 5 meters (pixel) per second
-			float maxSpeed = 200;	//set speed limit to 200 meters (pixel) per second
+			float maxSpeed = 50;	//set speed limit to 200 meters (pixel) per second
 			float displacement = baseSpeed + modLinear;
 			if(displacement > maxSpeed) {
 				displacement = maxSpeed;
@@ -244,17 +245,15 @@ public class GameScreen implements Screen {
 			}
 			if (obstacle.bounds.overlaps(coconut.bounds)) {
 				System.out.println("Collision detected");
-				game.setScreen(new GameOverScreen(game,points));
-				dispose();
+				//game.setScreen(new GameOverScreen(game,points));
+				//dispose();
 			}
 		}
 		
 	}
 
 	@Override
-	public void dispose() {
-		
-	}
+	public void dispose() {}
 	
 	@Override
 	public void show() {}

@@ -1,6 +1,7 @@
 package com.cocorun.game;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
@@ -19,6 +20,9 @@ public class Assets {
 	
 	//font setup
 	public static BitmapFont font;
+	
+	//sounds
+	public static Music BGM;
 	
 	//inactive buttons
 	public static Texture playBtnImg;
@@ -67,13 +71,19 @@ public class Assets {
 		/*
 		 * Configures the font we'll be using
 		 */
-		FreeTypeFontGenerator gen = new FreeTypeFontGenerator(Gdx.files.internal("Montserrat-Regular.ttf"));
+		FreeTypeFontGenerator gen = new FreeTypeFontGenerator(Gdx.files.internal("Fonts/Montserrat-Regular.ttf"));
 		FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
 		parameter.size = 32;
 		parameter.color = Color.valueOf("ffffff");
 		parameter.borderWidth = 1;
 		font = gen.generateFont(parameter);
 		font.getRegion().getTexture().setFilter(TextureFilter.Linear, TextureFilter.Linear);
+		
+		/*
+		 * Configure background music
+		 */
+		BGM = Gdx.audio.newMusic(Gdx.files.internal("Sound/bgm.mp3"));
+		BGM.setLooping(true);
 		
 		
 		/*
@@ -129,7 +139,7 @@ public class Assets {
 		/*
 		 * loads player textures and sprite
 		 */
-		coconutImage = new Texture(Gdx.files.internal("coconut64.png"));
+		coconutImage = new Texture(Gdx.files.internal("Player/cursed_angy.png"));
 		coconutImage.setFilter(TextureFilter.Linear, TextureFilter.Linear );	
 		coconutSprite = new Sprite(coconutImage);
 		
@@ -137,15 +147,15 @@ public class Assets {
 		/*
 		 * loads obstacles textures and sprite
 		 */
-		carImage = new Texture(Gdx.files.internal("Car.png"));
+		carImage = new Texture(Gdx.files.internal("Obstacle/Car.png"));
 		carImage.setFilter(TextureFilter.Linear, TextureFilter.Linear );	
 		carSprite = new Sprite(carImage);
 		
-		boulderImage = new Texture(Gdx.files.internal("Boulder.png"));
+		boulderImage = new Texture(Gdx.files.internal("Obstacle/Boulder.png"));
 		boulderImage.setFilter(TextureFilter.Linear, TextureFilter.Linear );	
 		boulderSprite = new Sprite(boulderImage);
 		
-		potholeImage = new Texture(Gdx.files.internal("Pothole.png"));
+		potholeImage = new Texture(Gdx.files.internal("Obstacle/Pothole.png"));
 		potholeImage.setFilter(TextureFilter.Linear, TextureFilter.Linear );	
 		potholeSprite = new Sprite(potholeImage);
 		

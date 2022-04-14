@@ -90,7 +90,9 @@ public class MainMenuScreen implements Screen {
 	}
 	
 	@Override
-	public void show() {}
+	public void show() {
+		Assets.BGM.play();
+	}
 
 	@Override
 	public void render(float delta) {
@@ -120,8 +122,8 @@ public class MainMenuScreen implements Screen {
 				
 				GlyphLayout gameTitleLayout = new GlyphLayout(Assets.font, "Run, Coco! Run!", Color.BLACK, 0, Align.center, false);
 				GlyphLayout highScoreLayout = new GlyphLayout(Assets.font, "Highscore: " + highscore, Color.BLACK, 0, Align.center, false);
-				Assets.font.draw(batch, gameTitleLayout, camera.viewportWidth / 2, camera.viewportHeight / 2 + btnHeight / 2 + 74);
-				Assets.font.draw(batch, highScoreLayout, camera.viewportWidth / 2 , camera.viewportHeight / 2 + btnHeight / 2 + 42);
+				Assets.font.draw(batch, gameTitleLayout, camera.viewportWidth / 2, (float)(camera.viewportHeight * 0.8));
+				Assets.font.draw(batch, highScoreLayout, camera.viewportWidth / 2 , (float)(camera.viewportHeight * 0.8) - 32);
 				
 				/*
 				 * configures x-coordinates of all button to center of screen
