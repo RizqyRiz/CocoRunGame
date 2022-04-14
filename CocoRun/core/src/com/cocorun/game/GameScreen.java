@@ -12,7 +12,6 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.TimeUtils;
@@ -24,7 +23,6 @@ public class GameScreen implements Screen {
 	private CocoRunGame game;
 	private OrthographicCamera camera;
 	private SpriteBatch batch;
-	private ShapeRenderer shape;
 	
 	private Viewport viewport;
 	
@@ -93,11 +91,11 @@ public class GameScreen implements Screen {
 		int randomLane = rand.nextInt(3);
 		int obsX = (int)camera.viewportWidth;
 		if(randomLane == 2)
-			obstacle = new Obstacle(obsX, topLane, 0);//rand.nextInt(3));
+			obstacle = new Obstacle(obsX, topLane, rand.nextInt(10));
 		else if (randomLane == 1) 
-			obstacle = new Obstacle(obsX, midLane, 0);//rand.nextInt(3));
+			obstacle = new Obstacle(obsX, midLane, rand.nextInt(10));
 		else
-			obstacle = new Obstacle(obsX, botLane, 0);//rand.nextInt(3));
+			obstacle = new Obstacle(obsX, botLane, rand.nextInt(10));
 
 		//store the objects instantiated into the array list
 		obstacles.add(obstacle);
@@ -123,13 +121,11 @@ public class GameScreen implements Screen {
 			}
 		} else {
 			generalUpdate();
+			System.out.println(timeElapsed);
 		}
 		
 		//resizes the SpriteBatch to the screen size we set it
 		batch.setProjectionMatrix(camera.combined);
-		
-		//enable alpha
-		//batch.enableBlending();
 		
 		//starts drawing the SpriteBatch into the canvas
 		batch.begin();
@@ -177,20 +173,7 @@ public class GameScreen implements Screen {
 	public void generalUpdate() {
 		timeElapsed += Gdx.graphics.getDeltaTime();
 		points = (int)(timeElapsed * 50);
-		int tempSeconds = (int)timeElapsed;
-		
-		/*
-		Assets.settings.putString("name", "Danial");
-		Assets.settings.flush();
-		Assets.name = Assets.settings.getString("name", "No name found");
-		*/
-		
-		/*if(tempSeconds != 0 && tempSeconds%59 == 0) {
-			seconds = tempSeconds;
-			tempTimeCounter += 1;
-			minutes = tempTimeCounter/60;
-		}*/
-		
+
 		// configure pause button
 		if(Gdx.input.isKeyJustPressed(Keys.ESCAPE)) {
 			System.out.println("PAUSED");
@@ -222,9 +205,16 @@ public class GameScreen implements Screen {
 		 *  check if we need to create a new obstacles
 		 *   below invokes spawnObstacle method
 		 *   every 0.5seconds (500000000 nanoseconds)
-		 *   of in-game time
+		 *   of in-game time and delay between each
+		 *   spawn is decreased over time
 		 */
-		if (TimeUtils.nanoTime() - lastObsTime > 500000000)
+		float spawnMod = timeElapsed * 10000000;
+		float spawnTime = 500000000;
+		spawnTime -= spawnMod;
+		if (spawnTime < 200000000) {
+			spawnTime = 200000000;
+		}
+		if (TimeUtils.nanoTime() - lastObsTime > spawnTime)
 			spawnObstacles();
 					
 		// looping through the obstacles array list and moving them
@@ -233,12 +223,12 @@ public class GameScreen implements Screen {
 			Obstacle obstacle = iter.next();
 			
 			//speed modifiers
-			float modExponential = (float) Math.pow(1.1, timeElapsed);
+			//float modExponential = (float) Math.pow(1.1, timeElapsed);
 			float modLinear = timeElapsed;
 			
 			//calculate speed increase over time
 			float baseSpeed = 5;		//set initial speed to 5 meters (pixel) per second
-			float maxSpeed = 80;	//set speed limit to 30 meters (pixel) per second
+			float maxSpeed = 200;	//set speed limit to 200 meters (pixel) per second
 			float displacement = baseSpeed + modLinear;
 			if(displacement > maxSpeed) {
 				displacement = maxSpeed;
@@ -256,12 +246,6 @@ public class GameScreen implements Screen {
 				System.out.println("Collision detected");
 				game.setScreen(new GameOverScreen(game,points));
 				dispose();
-				//dropsGathered++;
-				//dropSound.play();
-				//paused = true;
-				//iter.remove();
-				//game.setScreen(new MainMenuScreen(game));
-				//dispose();
 			}
 		}
 		
@@ -273,26 +257,17 @@ public class GameScreen implements Screen {
 	}
 	
 	@Override
-	//Executes once only (useful for game opening screen etc
-	public void show() {
-	}
+	public void show() {}
 	
 	@Override
-	//Not going to be used as we're using OrthographicCamera to rescale
-	public void resize(int width, int height) {	
-	}
+	public void resize(int width, int height) {}
 	
 	@Override
-	//Only for android
-	public void pause() {
-	}
+	public void pause() {}
 
 	@Override
-	//only for android
-	public void resume() {
-	}
+	public void resume() {}
 
 	@Override
-	public void hide() {
-	}
+	public void hide() {}
 }

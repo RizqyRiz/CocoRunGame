@@ -1,13 +1,13 @@
 package com.cocorun.game;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+
 
 /*
  *  This class is used to load anything 
@@ -75,6 +75,7 @@ public class Assets {
 		font = gen.generateFont(parameter);
 		font.getRegion().getTexture().setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		
+		
 		/*
 		 * loads inactive buttons
 		 */
@@ -89,6 +90,7 @@ public class Assets {
 		resumeBtnImg = new Texture(Gdx.files.internal("Buttons/resume.png"));
 		resumeBtnImg.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		resumeBtnSprite = new Sprite(resumeBtnImg);
+		
 		
 		/*
 		 * loads active buttons
@@ -105,6 +107,7 @@ public class Assets {
 		resumeActiveBtnImg.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		resumeActiveBtnSprite = new Sprite(resumeActiveBtnImg);
 
+		
 		/*
 		 * loads background image for in-game view
 		 */
@@ -114,6 +117,7 @@ public class Assets {
 		//converts the texture into a sprite which helps load faster
 		bgSprite = new Sprite(bgImage);
 		
+		
 		/*
 		 * loads a darkened layer for pause screen
 		 */
@@ -121,12 +125,14 @@ public class Assets {
 		darkAlphaImg.setFilter(TextureFilter.Linear, TextureFilter.Linear );	
 		darkAlphaSprite = new Sprite(darkAlphaImg);
 		
+		
 		/*
 		 * loads player textures and sprite
 		 */
 		coconutImage = new Texture(Gdx.files.internal("coconut64.png"));
 		coconutImage.setFilter(TextureFilter.Linear, TextureFilter.Linear );	
 		coconutSprite = new Sprite(coconutImage);
+		
 		
 		/*
 		 * loads obstacles textures and sprite
@@ -142,6 +148,7 @@ public class Assets {
 		potholeImage = new Texture(Gdx.files.internal("Pothole.png"));
 		potholeImage.setFilter(TextureFilter.Linear, TextureFilter.Linear );	
 		potholeSprite = new Sprite(potholeImage);
+		
 		
 		/*
 		 * loads background textures and sprite

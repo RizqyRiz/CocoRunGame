@@ -78,11 +78,11 @@ public class MainMenuScreen implements Screen {
 		int randomLane = rand.nextInt(3);
 		int obsX = (int)camera.viewportWidth;
 		if(randomLane == 2)
-			obstacle = new Obstacle(obsX, topLane, 0);//rand.nextInt(3));
+			obstacle = new Obstacle(obsX, topLane, 3);
 		else if (randomLane == 1) 
-			obstacle = new Obstacle(obsX, midLane, 0);//rand.nextInt(3));
+			obstacle = new Obstacle(obsX, midLane, 3);
 		else
-			obstacle = new Obstacle(obsX, botLane, 0);//rand.nextInt(3));
+			obstacle = new Obstacle(obsX, botLane, 3);
 
 		//store the objects instantiated into the array list
 		obstacles.add(obstacle);
@@ -112,6 +112,7 @@ public class MainMenuScreen implements Screen {
 		batch.begin();
 		
 				batch.draw(Assets.bgSprite, 0, 0, viewport.getWorldWidth(), viewport.getWorldHeight());
+				batch.draw(Assets.boulderSprite, 0, viewport.getWorldHeight() / 2);
 				
 				for (Obstacle obstacle : obstacles) {
 					batch.draw(obstacle.sprite, obstacle.bounds.x, obstacle.bounds.y);
@@ -178,33 +179,18 @@ public class MainMenuScreen implements Screen {
 	}
 
 	@Override
-	public void resize(int width, int height) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void resize(int width, int height) {}
 
 	@Override
-	public void pause() {
-		// TODO Auto-generated method stub
-		
-	}
+	public void pause() {}
 
 	@Override
-	public void resume() {
-		// TODO Auto-generated method stub
-		
-	}
+	public void resume() {}
 
 	@Override
-	public void hide() {
-		// TODO Auto-generated method stub
-		
-	}
+	public void hide() {}
 
 	@Override
-	public void dispose() {
-		// TODO Auto-generated method stub
-		
-	}
+	public void dispose() {}
 
 }

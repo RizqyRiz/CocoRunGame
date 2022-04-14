@@ -18,9 +18,10 @@ public class Obstacle {
 		 * as a determinant for obstacle's sprite
 		 */
 		switch(type) {
-		case 0: sprite = Assets.carSprite;break;
-		case 1: sprite = Assets.boulderSprite;break;
-		case 2: sprite = Assets.potholeSprite;break;
+		//case 0: sprite = Assets.carSprite;break;
+		case 0: sprite = Assets.boulderSprite;break;
+		case 1: sprite = Assets.potholeSprite;break;
+		default: sprite = Assets.carSprite; 
 		}
 		
 		/*
