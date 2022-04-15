@@ -86,6 +86,7 @@ public class GameOverScreen implements Screen {
 				if (Gdx.input.getX() < btnX + btnWidth && Gdx.input.getX() > btnX && camera.viewportHeight - Gdx.input.getY() < playBtnY + btnHeight &&  camera.viewportHeight - Gdx.input.getY() > playBtnY) {
 					batch.draw(Assets.playActiveBtnSprite, btnX, playBtnY, btnWidth, btnHeight);
 					if(Gdx.input.justTouched()) {
+						Assets.btnPressSFX.play();
 						game.setScreen(new GameScreen(game));
 						dispose();
 					}
@@ -96,6 +97,7 @@ public class GameOverScreen implements Screen {
 				if (Gdx.input.getX() < btnX + btnWidth && Gdx.input.getX() > btnX && camera.viewportHeight - Gdx.input.getY() < exitBtnY + btnHeight &&  camera.viewportHeight - Gdx.input.getY() > exitBtnY) {
 					batch.draw(Assets.exitActiveBtnSprite, btnX, exitBtnY, btnWidth, btnHeight);
 					if(Gdx.input.justTouched()) {
+						Assets.btnPressSFX.play();
 						game.setScreen(new MainMenuScreen(game, highscore));
 						dispose();
 					}

@@ -117,6 +117,7 @@ public class GameScreen implements Screen {
 		// handles what happens when the game is or isn't paused
 		if(paused) {
 			if(Gdx.input.isKeyJustPressed(Keys.ESCAPE)) {
+				Assets.pausePopupSFX.play();
 				System.out.println("RESUME");
 				paused = false;
 			}
@@ -150,6 +151,7 @@ public class GameScreen implements Screen {
 					if (Gdx.input.getX() < btnX + btnWidth && Gdx.input.getX() > btnX && camera.viewportHeight - Gdx.input.getY() < playBtnY + btnHeight &&  camera.viewportHeight - Gdx.input.getY() > playBtnY) {
 						batch.draw(Assets.resumeActiveBtnSprite, btnX, playBtnY, btnWidth, btnHeight);
 						if(Gdx.input.justTouched()) {
+							Assets.btnPressSFX.play();
 							paused = false;
 						}
 					} else {
@@ -159,6 +161,7 @@ public class GameScreen implements Screen {
 					if (Gdx.input.getX() < btnX + btnWidth && Gdx.input.getX() > btnX && camera.viewportHeight - Gdx.input.getY() < exitBtnY + btnHeight &&  camera.viewportHeight - Gdx.input.getY() > exitBtnY) {
 						batch.draw(Assets.exitActiveBtnSprite, btnX, exitBtnY, btnWidth, btnHeight);
 						if(Gdx.input.justTouched()) {
+							Assets.btnPressSFX.play();
 							game.setScreen(new MainMenuScreen(game, 0));
 							dispose();
 						}
@@ -177,6 +180,7 @@ public class GameScreen implements Screen {
 
 		// configure pause button
 		if(Gdx.input.isKeyJustPressed(Keys.ESCAPE)) {
+			Assets.pausePopupSFX.play();
 			System.out.println("PAUSED");
 			paused = true;
 		}
@@ -209,7 +213,7 @@ public class GameScreen implements Screen {
 		 *   of in-game time and delay between each
 		 *   spawn is decreased over time
 		 */
-		float spawnMod = TimeUtils.nanoTime() / 1000000;
+		float spawnMod = TimeUtils.nanoTime() / 10000000;
 		spawnTime -= spawnMod;
 		if (spawnTime < 300000000) {
 			spawnTime = 300000000;
@@ -245,8 +249,9 @@ public class GameScreen implements Screen {
 			}
 			if (obstacle.bounds.overlaps(coconut.bounds)) {
 				System.out.println("Collision detected");
-				//game.setScreen(new GameOverScreen(game,points));
-				//dispose();
+				Assets.collisionSFX.play();
+				game.setScreen(new GameOverScreen(game,points));
+				dispose();
 			}
 		}
 		

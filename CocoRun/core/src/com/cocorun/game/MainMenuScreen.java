@@ -114,7 +114,7 @@ public class MainMenuScreen implements Screen {
 		batch.begin();
 		
 				batch.draw(Assets.bgSprite, 0, 0, viewport.getWorldWidth(), viewport.getWorldHeight());
-				batch.draw(Assets.boulderSprite, 0, viewport.getWorldHeight() / 2);
+				batch.draw(Assets.treeSprite, 10, viewport.getWorldHeight() / 2 + 5);
 				
 				for (Obstacle obstacle : obstacles) {
 					batch.draw(obstacle.sprite, obstacle.bounds.x, obstacle.bounds.y);
@@ -136,6 +136,7 @@ public class MainMenuScreen implements Screen {
 				if (Gdx.input.getX() < btnX + btnWidth && Gdx.input.getX() > btnX && camera.viewportHeight - Gdx.input.getY() < playBtnY + btnHeight &&  camera.viewportHeight - Gdx.input.getY() > playBtnY) {
 					batch.draw(Assets.playActiveBtnSprite, btnX, playBtnY, btnWidth, btnHeight);
 					if(Gdx.input.justTouched()) {
+						Assets.btnPressSFX.play();
 						game.setScreen(new GameScreen(game));
 						dispose();
 					}
@@ -146,8 +147,14 @@ public class MainMenuScreen implements Screen {
 				if (Gdx.input.getX() < btnX + btnWidth && Gdx.input.getX() > btnX && camera.viewportHeight - Gdx.input.getY() < exitBtnY + btnHeight &&  camera.viewportHeight - Gdx.input.getY() > exitBtnY) {
 					batch.draw(Assets.exitActiveBtnSprite, btnX, exitBtnY, btnWidth, btnHeight);
 					if(Gdx.input.justTouched()) {
-						dispose();
-						System.exit(1);
+						Assets.btnPressSFX.play();
+						try {
+							Thread.sleep(500);
+							dispose();
+							System.exit(1);
+						} catch (Exception e) {
+							System.out.println(e);
+						}
 					}
 				} else {
 					batch.draw(Assets.exitBtnSprite, btnX, exitBtnY, btnWidth, btnHeight);

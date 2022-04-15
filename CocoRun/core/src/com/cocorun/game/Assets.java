@@ -23,6 +23,9 @@ public class Assets {
 	
 	//sounds
 	public static Music BGM;
+	public static Music btnPressSFX;
+	public static Music collisionSFX;
+	public static Music pausePopupSFX;
 	
 	//inactive buttons
 	public static Texture playBtnImg;
@@ -80,10 +83,13 @@ public class Assets {
 		font.getRegion().getTexture().setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		
 		/*
-		 * Configure background music
+		 * Configure background music and sfx
 		 */
 		BGM = Gdx.audio.newMusic(Gdx.files.internal("Sound/bgm.mp3"));
 		BGM.setLooping(true);
+		btnPressSFX = Gdx.audio.newMusic(Gdx.files.internal("Sound/btn_click_1.wav"));
+		collisionSFX = Gdx.audio.newMusic(Gdx.files.internal("Sound/collision_4.mp3"));
+		pausePopupSFX = Gdx.audio.newMusic(Gdx.files.internal("Sound/pause_open_3.wav"));
 		
 		
 		/*
@@ -163,7 +169,7 @@ public class Assets {
 		/*
 		 * loads background textures and sprite
 		 */
-		treeImage = new Texture(Gdx.files.internal("Tree.png"));
+		treeImage = new Texture(Gdx.files.internal("tree128px.png"));
 		treeImage.setFilter(TextureFilter.Linear, TextureFilter.Linear );	
 		treeSprite = new Sprite(treeImage);
 		
