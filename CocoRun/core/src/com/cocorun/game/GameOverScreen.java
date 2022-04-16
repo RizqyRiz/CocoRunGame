@@ -1,7 +1,6 @@
 package com.cocorun.game;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -19,10 +18,8 @@ public class GameOverScreen implements Screen {
 	private SpriteBatch batch;
 	private Viewport viewport;
 	
-	private int score, highscore;
+	private int score;
 	private String newHigh = "";
-	
-	private Preferences saveFile;
 	
 	public GameOverScreen(CocoRunGame game, int score) {
 		this.game = game;
@@ -42,15 +39,12 @@ public class GameOverScreen implements Screen {
 		
 		batch = new SpriteBatch();
 		
-		saveFile = Gdx.app.getPreferences("CocorunSave");
-		this.highscore = Assets.highscore;
-		
 		//checks if current score beats highscore
-		if (score > highscore) {
-			highscore = score;
+		if (score > Assets.highscore) {
+			Assets.highscore = score;
 			newHigh = " (NEW!)";
-			saveFile.putInteger("highscore", score);
-			saveFile.flush();
+			Assets.saveFile.putInteger("highscore", score);
+			Assets.saveFile.flush();
 		}
 
 	}
@@ -77,7 +71,7 @@ public class GameOverScreen implements Screen {
 				float exitBtnY = (float)(camera.viewportHeight * 0.2);
 				
 				GlyphLayout gameOverLayout = new GlyphLayout(Assets.font, "GAME OVER!", Color.WHITE, 0, Align.center, false);
-				GlyphLayout highScoreLayout = new GlyphLayout(Assets.font, "Highscore: " + highscore + newHigh, Color.WHITE, 0, Align.center, false);
+				GlyphLayout highScoreLayout = new GlyphLayout(Assets.font, "Highscore: " + Assets.highscore + newHigh, Color.WHITE, 0, Align.center, false);
 				GlyphLayout scoreLayout = new GlyphLayout(Assets.font, "Score: " + score, Color.WHITE, 0, Align.center, false);
 				Assets.font.draw(batch, gameOverLayout, camera.viewportWidth / 2, camera.viewportHeight / 2 + CocoRunGame.BTN_HEIGHT / 2 + 74);
 				Assets.font.draw(batch, highScoreLayout, camera.viewportWidth / 2 , camera.viewportHeight / 2 + CocoRunGame.BTN_HEIGHT / 2 + 42);
@@ -98,7 +92,7 @@ public class GameOverScreen implements Screen {
 					batch.draw(Assets.exitActiveBtnSprite, btnX, exitBtnY, CocoRunGame.BTN_WIDTH, CocoRunGame.BTN_HEIGHT);
 					if(Gdx.input.justTouched()) {
 						Assets.btnPressSFX.play();
-						game.setScreen(new MainMenuScreen(game, highscore));
+						game.setScreen(new MainMenuScreen(game, Assets.highscore));
 						dispose();
 					}
 				} else {

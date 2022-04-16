@@ -21,7 +21,8 @@ public class Assets {
 	//game title
 	public static Texture title;
 	
-	//saved high score
+	//save handling
+	protected static Preferences saveFile;
 	public static int highscore;
 	
 	//font setup
@@ -87,7 +88,7 @@ public class Assets {
 		
 		title = new Texture(Gdx.files.internal("Title.png"));
 		
-		Preferences saveFile = Gdx.app.getPreferences("CocorunSave");
+		saveFile = Gdx.app.getPreferences("CocorunSave");
 		highscore = saveFile.getInteger("highscore", 0);
 		
 		/*

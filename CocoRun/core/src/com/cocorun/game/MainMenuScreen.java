@@ -47,8 +47,7 @@ public class MainMenuScreen implements Screen {
 		game.scrollingBackground.setSpeed(ScrollingBackground.DEFAULT_SPEED);		
 		
 		//save file handling
-		Preferences saveFile = Gdx.app.getPreferences("CocorunSave");
-		this.highscore = saveFile.getInteger("highscore", 0);
+		this.highscore = Assets.saveFile.getInteger("highscore", 0);
 		
 		/*
 		 * setToOrtho(false) = mathematical axis (y-axis: bottom -> top)
