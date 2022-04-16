@@ -19,11 +19,10 @@ public class GameOverScreen implements Screen {
 	private SpriteBatch batch;
 	private Viewport viewport;
 	
-	private static final int btnWidth = 192;
-	private static final int btnHeight = 108;
+	private int score, highscore;
+	private String newHigh = "";
 	
-	int score, highscore;
-	String newHigh = "";
+	private Preferences saveFile;
 	
 	public GameOverScreen(CocoRunGame game, int score) {
 		this.game = game;
@@ -43,9 +42,8 @@ public class GameOverScreen implements Screen {
 		
 		batch = new SpriteBatch();
 		
-		//save file handling
-		Preferences saveFile = Gdx.app.getPreferences("CocorunSave");
-		this.highscore = saveFile.getInteger("highscore", 0);
+		saveFile = Gdx.app.getPreferences("CocorunSave");
+		this.highscore = Assets.highscore;
 		
 		//checks if current score beats highscore
 		if (score > highscore) {
@@ -72,37 +70,37 @@ public class GameOverScreen implements Screen {
 		batch.setProjectionMatrix(camera.combined);
 		
 		batch.begin();
-				float btnX = (camera.viewportWidth / 2 - btnWidth / 2);
+				float btnX = (camera.viewportWidth / 2 - CocoRunGame.BTN_WIDTH / 2);
 				float playBtnY = (float)(camera.viewportHeight * 0.4);
 				float exitBtnY = (float)(camera.viewportHeight * 0.2);
 				
 				GlyphLayout gameOverLayout = new GlyphLayout(Assets.font, "GAME OVER!", Color.WHITE, 0, Align.center, false);
 				GlyphLayout highScoreLayout = new GlyphLayout(Assets.font, "Highscore: " + highscore + newHigh, Color.WHITE, 0, Align.center, false);
 				GlyphLayout scoreLayout = new GlyphLayout(Assets.font, "Score: " + score, Color.WHITE, 0, Align.center, false);
-				Assets.font.draw(batch, gameOverLayout, camera.viewportWidth / 2, camera.viewportHeight / 2 + btnHeight / 2 + 74);
-				Assets.font.draw(batch, highScoreLayout, camera.viewportWidth / 2 , camera.viewportHeight / 2 + btnHeight / 2 + 42);
-				Assets.font.draw(batch, scoreLayout, camera.viewportWidth / 2 , camera.viewportHeight / 2 + btnHeight / 2 + 10);
+				Assets.font.draw(batch, gameOverLayout, camera.viewportWidth / 2, camera.viewportHeight / 2 + CocoRunGame.BTN_HEIGHT / 2 + 74);
+				Assets.font.draw(batch, highScoreLayout, camera.viewportWidth / 2 , camera.viewportHeight / 2 + CocoRunGame.BTN_HEIGHT / 2 + 42);
+				Assets.font.draw(batch, scoreLayout, camera.viewportWidth / 2 , camera.viewportHeight / 2 + CocoRunGame.BTN_HEIGHT / 2 + 10);
 				
-				if (Gdx.input.getX() < btnX + btnWidth && Gdx.input.getX() > btnX && camera.viewportHeight - Gdx.input.getY() < playBtnY + btnHeight &&  camera.viewportHeight - Gdx.input.getY() > playBtnY) {
-					batch.draw(Assets.playActiveBtnSprite, btnX, playBtnY, btnWidth, btnHeight);
+				if (Gdx.input.getX() < btnX + CocoRunGame.BTN_WIDTH && Gdx.input.getX() > btnX && camera.viewportHeight - Gdx.input.getY() < playBtnY + CocoRunGame.BTN_HEIGHT &&  camera.viewportHeight - Gdx.input.getY() > playBtnY) {
+					batch.draw(Assets.playActiveBtnSprite, btnX, playBtnY, CocoRunGame.BTN_WIDTH, CocoRunGame.BTN_HEIGHT);
 					if(Gdx.input.justTouched()) {
 						Assets.btnPressSFX.play();
 						game.setScreen(new GameScreen(game));
 						dispose();
 					}
 				} else {
-					batch.draw(Assets.playBtnSprite, btnX, playBtnY, btnWidth, btnHeight);
+					batch.draw(Assets.playBtnSprite, btnX, playBtnY, CocoRunGame.BTN_WIDTH, CocoRunGame.BTN_HEIGHT);
 				}
 				
-				if (Gdx.input.getX() < btnX + btnWidth && Gdx.input.getX() > btnX && camera.viewportHeight - Gdx.input.getY() < exitBtnY + btnHeight &&  camera.viewportHeight - Gdx.input.getY() > exitBtnY) {
-					batch.draw(Assets.exitActiveBtnSprite, btnX, exitBtnY, btnWidth, btnHeight);
+				if (Gdx.input.getX() < btnX + CocoRunGame.BTN_WIDTH && Gdx.input.getX() > btnX && camera.viewportHeight - Gdx.input.getY() < exitBtnY + CocoRunGame.BTN_HEIGHT &&  camera.viewportHeight - Gdx.input.getY() > exitBtnY) {
+					batch.draw(Assets.exitActiveBtnSprite, btnX, exitBtnY, CocoRunGame.BTN_WIDTH, CocoRunGame.BTN_HEIGHT);
 					if(Gdx.input.justTouched()) {
 						Assets.btnPressSFX.play();
 						game.setScreen(new MainMenuScreen(game, highscore));
 						dispose();
 					}
 				} else {
-					batch.draw(Assets.exitBtnSprite, btnX, exitBtnY, btnWidth, btnHeight);
+					batch.draw(Assets.exitBtnSprite, btnX, exitBtnY, CocoRunGame.BTN_WIDTH, CocoRunGame.BTN_HEIGHT);
 				}
 				
 		batch.end();

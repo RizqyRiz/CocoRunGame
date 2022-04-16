@@ -6,8 +6,8 @@ import java.util.ListIterator;
 import java.util.Random;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -25,7 +25,7 @@ public class MainMenuScreen implements Screen {
 	private OrthographicCamera camera;
 	private SpriteBatch batch;
 	private Viewport viewport;
-	private int highscore;
+	private long highscore;
 	
 	private Obstacle obstacle;
 	private List<Obstacle> obstacles;
@@ -38,13 +38,11 @@ public class MainMenuScreen implements Screen {
 	//randomizer setup
 	private Random rand = new Random();
 	
-	private static final int btnWidth = 192;
-	private static final int btnHeight = 108;
-	
-	//private static final int playBtnY = 100;
-	
 	public MainMenuScreen(CocoRunGame game, int highscore) {
 		this.game = game;
+		
+		game.scrollingBackground.setFixedSpeed(true);
+		game.scrollingBackground.setSpeed(ScrollingBackground.DEFAULT_SPEED);		
 		
 		//save file handling
 		Preferences saveFile = Gdx.app.getPreferences("CocorunSave");
@@ -73,7 +71,7 @@ public class MainMenuScreen implements Screen {
 		spawnObstacles();
 	}
 	
-	private void spawnObstacles() {
+	public void spawnObstacles() {
 		//randomizes the position the obstacles will spawn on and instantiating the obstacle object
 		int randomLane = rand.nextInt(3);
 		int obsX = (int)camera.viewportWidth;
@@ -113,11 +111,13 @@ public class MainMenuScreen implements Screen {
 		//starts drawing the SpriteBatch into the canvas
 		batch.begin();
 		
-				batch.draw(Assets.bgSprite, 0, 0, viewport.getWorldWidth(), viewport.getWorldHeight());
-				batch.draw(Assets.treeSprite, 10, viewport.getWorldHeight() / 2 + 5);
+				//batch.draw(Assets.bgSprite, 0, 0, viewport.getWorldWidth(), viewport.getWorldHeight());
+				//batch.draw(Assets.treeSprite, 10, viewport.getWorldHeight() / 2 + 5);
 				
+				game.scrollingBackground.updateAndRender(delta, batch);
+		
 				for (Obstacle obstacle : obstacles) {
-					batch.draw(obstacle.sprite, obstacle.bounds.x, obstacle.bounds.y);
+					batch.draw(obstacle.getSprite(), obstacle.getX(), obstacle.getY());
 				}
 				
 				GlyphLayout gameTitleLayout = new GlyphLayout(Assets.font, "Run, Coco! Run!", Color.BLACK, 0, Align.center, false);
@@ -129,23 +129,23 @@ public class MainMenuScreen implements Screen {
 				 * configures x-coordinates of all button to center of screen
 				 * configures y-coordinates of different buttons
 				 */
-				float btnX = (camera.viewportWidth / 2 - btnWidth / 2);
+				float btnX = (camera.viewportWidth / 2 - CocoRunGame.BTN_WIDTH / 2);
 				float playBtnY = (float)(camera.viewportHeight * 0.4);
 				float exitBtnY = (float)(camera.viewportHeight * 0.2);
 				
-				if (Gdx.input.getX() < btnX + btnWidth && Gdx.input.getX() > btnX && camera.viewportHeight - Gdx.input.getY() < playBtnY + btnHeight &&  camera.viewportHeight - Gdx.input.getY() > playBtnY) {
-					batch.draw(Assets.playActiveBtnSprite, btnX, playBtnY, btnWidth, btnHeight);
+				if (Gdx.input.getX() < btnX + CocoRunGame.BTN_WIDTH && Gdx.input.getX() > btnX && camera.viewportHeight - Gdx.input.getY() < playBtnY + CocoRunGame.BTN_HEIGHT &&  camera.viewportHeight - Gdx.input.getY() > playBtnY) {
+					batch.draw(Assets.playActiveBtnSprite, btnX, playBtnY, CocoRunGame.BTN_WIDTH, CocoRunGame.BTN_HEIGHT);
 					if(Gdx.input.justTouched()) {
 						Assets.btnPressSFX.play();
 						game.setScreen(new GameScreen(game));
 						dispose();
 					}
 				} else {
-					batch.draw(Assets.playBtnSprite, btnX, playBtnY, btnWidth, btnHeight);
+					batch.draw(Assets.playBtnSprite, btnX, playBtnY, CocoRunGame.BTN_WIDTH, CocoRunGame.BTN_HEIGHT);
 				}
 				
-				if (Gdx.input.getX() < btnX + btnWidth && Gdx.input.getX() > btnX && camera.viewportHeight - Gdx.input.getY() < exitBtnY + btnHeight &&  camera.viewportHeight - Gdx.input.getY() > exitBtnY) {
-					batch.draw(Assets.exitActiveBtnSprite, btnX, exitBtnY, btnWidth, btnHeight);
+				if (Gdx.input.getX() < btnX + CocoRunGame.BTN_WIDTH && Gdx.input.getX() > btnX && camera.viewportHeight - Gdx.input.getY() < exitBtnY + CocoRunGame.BTN_HEIGHT &&  camera.viewportHeight - Gdx.input.getY() > exitBtnY) {
+					batch.draw(Assets.exitActiveBtnSprite, btnX, exitBtnY, CocoRunGame.BTN_WIDTH, CocoRunGame.BTN_HEIGHT);
 					if(Gdx.input.justTouched()) {
 						Assets.btnPressSFX.play();
 						try {
@@ -157,7 +157,7 @@ public class MainMenuScreen implements Screen {
 						}
 					}
 				} else {
-					batch.draw(Assets.exitBtnSprite, btnX, exitBtnY, btnWidth, btnHeight);
+					batch.draw(Assets.exitBtnSprite, btnX, exitBtnY, CocoRunGame.BTN_WIDTH, CocoRunGame.BTN_HEIGHT);
 				}
 			
 		batch.end();
@@ -177,8 +177,8 @@ public class MainMenuScreen implements Screen {
 			Obstacle obstacle = iter.next();
 
 			//moves the obstacles from right to left of screen
-			obstacle.bounds.x -=  30;
-			if (obstacle.bounds.x + 64 < 0) {
+			obstacle.setX(30);
+			if (obstacle.getX() + 64 < 0) {
 				/*
 				 * removes the obstacle once it misses the player and  hits the left side of the screen
 				 */

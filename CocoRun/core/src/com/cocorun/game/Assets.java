@@ -1,6 +1,7 @@
 package com.cocorun.game;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
@@ -17,6 +18,9 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
  */
 
 public class Assets {
+	
+	//saved high score
+	public static int highscore;
 	
 	//font setup
 	public static BitmapFont font;
@@ -70,6 +74,9 @@ public class Assets {
 	public static Sprite potholeSprite;
 	
 	public static void load() {
+		
+		Preferences saveFile = Gdx.app.getPreferences("CocorunSave");
+		highscore = saveFile.getInteger("highscore", 0);
 		
 		/*
 		 * Configures the font we'll be using
@@ -129,7 +136,7 @@ public class Assets {
 		 */
 		bgImage = new Texture(Gdx.files.internal("background-cocorun.png"));
 		//used so that the image isn't messed up when scaling
-		bgImage.setFilter(TextureFilter.Linear, TextureFilter.Linear );	
+		//bgImage.setFilter(TextureFilter.Linear, TextureFilter.Linear );	
 		//converts the texture into a sprite which helps load faster
 		bgSprite = new Sprite(bgImage);
 		

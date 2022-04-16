@@ -23,10 +23,10 @@ public class GameScreen implements Screen {
 	private CocoRunGame game;
 	private OrthographicCamera camera;
 	private SpriteBatch batch;
-	
 	private Viewport viewport;
 	
 	private Player coconut;
+	private int playerX;
 	
 	private Obstacle obstacle;
 	private List<Obstacle> obstacles;
@@ -47,12 +47,10 @@ public class GameScreen implements Screen {
 	//randomizer setup
 	private Random rand = new Random();
 	
-	private static final int btnWidth = 192;
-	private static final int btnHeight = 108;
-	
-	
 	public GameScreen(CocoRunGame game) {
 		this.game = game;
+		
+		game.scrollingBackground.setFixedSpeed(false);
 		
 		/*
 		 * setToOrtho(false) = mathematical axis (y-axis: bottom -> top)
@@ -75,7 +73,7 @@ public class GameScreen implements Screen {
 		batch = new SpriteBatch();
 		
 		//spawns the player on the middle lane
-		int playerX = (int)(camera.viewportWidth*0.05);
+		playerX = (int)(camera.viewportWidth*0.05);
 		coconut = new Player(playerX,midLane);
 		
 		//initialize time elapsed and game timer since the game session starts
@@ -131,42 +129,45 @@ public class GameScreen implements Screen {
 		
 		//starts drawing the SpriteBatch into the canvas
 		batch.begin();
-				batch.draw(Assets.bgSprite, 0, 0, viewport.getWorldWidth(), viewport.getWorldHeight());
+				//batch.draw(Assets.bgSprite, 0, 0, viewport.getWorldWidth(), viewport.getWorldHeight());
+				
+				game.scrollingBackground.updateAndRender(delta, batch);
+		
 				for (Obstacle obstacle : obstacles) {
-					batch.draw(obstacle.sprite, obstacle.bounds.x, obstacle.bounds.y);
+					batch.draw(obstacle.getSprite(), obstacle.getX(), obstacle.getY());
 				}
-				batch.draw(coconut.sprite, coconut.bounds.x, coconut.bounds.y);
+				batch.draw(coconut.getSprite(), coconut.getX(), coconut.getY());
 				Assets.font.draw(batch, "Points earned: " + points, 10, camera.viewportHeight - 30);
 				
 				if(paused) {
 					batch.draw(Assets.darkAlphaSprite, 0, 0);
 					Assets.font.draw(batch, "Points earned: " + points, 10, camera.viewportHeight - 30);
 					GlyphLayout pauseTextLayout = new GlyphLayout(Assets.font, "PAUSED", Color.WHITE, 0, Align.center, false);
-					Assets.font.draw(batch, pauseTextLayout, camera.viewportWidth / 2, camera.viewportHeight / 2 + btnHeight / 2 + 74);
+					Assets.font.draw(batch, pauseTextLayout, camera.viewportWidth / 2, camera.viewportHeight / 2 + CocoRunGame.BTN_HEIGHT / 2 + 74);
 					
-					float btnX = (camera.viewportWidth / 2 - btnWidth / 2);
+					float btnX = (camera.viewportWidth / 2 - CocoRunGame.BTN_WIDTH / 2);
 					float playBtnY = (float)(camera.viewportHeight * 0.4);
 					float exitBtnY = (float)(camera.viewportHeight * 0.2);
 					
-					if (Gdx.input.getX() < btnX + btnWidth && Gdx.input.getX() > btnX && camera.viewportHeight - Gdx.input.getY() < playBtnY + btnHeight &&  camera.viewportHeight - Gdx.input.getY() > playBtnY) {
-						batch.draw(Assets.resumeActiveBtnSprite, btnX, playBtnY, btnWidth, btnHeight);
+					if (Gdx.input.getX() < btnX + CocoRunGame.BTN_WIDTH && Gdx.input.getX() > btnX && camera.viewportHeight - Gdx.input.getY() < playBtnY + CocoRunGame.BTN_HEIGHT &&  camera.viewportHeight - Gdx.input.getY() > playBtnY) {
+						batch.draw(Assets.resumeActiveBtnSprite, btnX, playBtnY, CocoRunGame.BTN_WIDTH, CocoRunGame.BTN_HEIGHT);
 						if(Gdx.input.justTouched()) {
 							Assets.btnPressSFX.play();
 							paused = false;
 						}
 					} else {
-						batch.draw(Assets.resumeBtnSprite, btnX, playBtnY, btnWidth, btnHeight);
+						batch.draw(Assets.resumeBtnSprite, btnX, playBtnY, CocoRunGame.BTN_WIDTH, CocoRunGame.BTN_HEIGHT);
 					}
 					
-					if (Gdx.input.getX() < btnX + btnWidth && Gdx.input.getX() > btnX && camera.viewportHeight - Gdx.input.getY() < exitBtnY + btnHeight &&  camera.viewportHeight - Gdx.input.getY() > exitBtnY) {
-						batch.draw(Assets.exitActiveBtnSprite, btnX, exitBtnY, btnWidth, btnHeight);
+					if (Gdx.input.getX() < btnX + CocoRunGame.BTN_WIDTH && Gdx.input.getX() > btnX && camera.viewportHeight - Gdx.input.getY() < exitBtnY + CocoRunGame.BTN_HEIGHT &&  camera.viewportHeight - Gdx.input.getY() > exitBtnY) {
+						batch.draw(Assets.exitActiveBtnSprite, btnX, exitBtnY, CocoRunGame.BTN_WIDTH, CocoRunGame.BTN_HEIGHT);
 						if(Gdx.input.justTouched()) {
 							Assets.btnPressSFX.play();
 							game.setScreen(new MainMenuScreen(game, 0));
 							dispose();
 						}
 					} else {
-						batch.draw(Assets.exitBtnSprite, btnX, exitBtnY, btnWidth, btnHeight);
+						batch.draw(Assets.exitBtnSprite, btnX, exitBtnY, CocoRunGame.BTN_WIDTH, CocoRunGame.BTN_HEIGHT);
 					}
 					
 				}
@@ -187,22 +188,22 @@ public class GameScreen implements Screen {
 		
 		//configure user input and controls
 		if (Gdx.input.isKeyJustPressed(Keys.W) || Gdx.input.isKeyJustPressed(Keys.UP)) {
-			if (coconut.bounds.y == botLane) {
-				coconut.bounds.y = midLane;
-			} else if (coconut.bounds.y == midLane) {
-				coconut.bounds.y = topLane;
+			if (coconut.getY() == botLane) {
+				coconut.setY(midLane);
+			} else if (coconut.getY() == midLane) {
+				coconut.setY(topLane);
 			} else {
-				coconut.bounds.y = topLane;
+				coconut.setY(topLane);
 			}
 		}
 		if (Gdx.input.isKeyJustPressed(Keys.S) || Gdx.input.isKeyJustPressed(Keys.DOWN)) {
 			
-			if (coconut.bounds.y == topLane) {
-				coconut.bounds.y = midLane;
-			} else if (coconut.bounds.y == midLane) {
-				coconut.bounds.y = botLane;
+			if (coconut.getY() == topLane) {
+				coconut.setY(midLane);
+			} else if (coconut.getY() == midLane) {
+				coconut.setY(botLane);
 			} else {
-				coconut.bounds.y = botLane;
+				coconut.setY(botLane);
 			}
 		}
 		
@@ -213,10 +214,10 @@ public class GameScreen implements Screen {
 		 *   of in-game time and delay between each
 		 *   spawn is decreased over time
 		 */
-		float spawnMod = TimeUtils.nanoTime() / 10000000;
+		float spawnMod = TimeUtils.nanoTime() / 150000000;
 		spawnTime -= spawnMod;
-		if (spawnTime < 300000000) {
-			spawnTime = 300000000;
+		if (spawnTime < 200000000) {
+			spawnTime = 200000000;
 		}
 		if (TimeUtils.nanoTime() - lastObsTime > spawnTime) {
 			spawnObstacles();
@@ -240,14 +241,14 @@ public class GameScreen implements Screen {
 			}
 			
 			//moves the obstacles towards the player (from right to left of screen)
-			obstacle.bounds.x -=  displacement;//displacement; 
-			if (obstacle.bounds.x + 64 < 0) {
+			obstacle.setX(displacement); 
+			if (obstacle.getX() + 64 < 0) {
 				/*
 				 * removes the obstacle once it misses the player and  hits the left side of the screen
 				 */
 				iter.remove();
 			}
-			if (obstacle.bounds.overlaps(coconut.bounds)) {
+			if (obstacle.isOverlap(coconut.getBounds())) {
 				System.out.println("Collision detected");
 				Assets.collisionSFX.play();
 				game.setScreen(new GameOverScreen(game,points));
