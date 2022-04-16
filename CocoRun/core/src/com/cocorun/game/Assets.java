@@ -18,6 +18,8 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
  */
 
 public class Assets {
+	//game title
+	public static Texture title;
 	
 	//saved high score
 	public static int highscore;
@@ -33,33 +35,41 @@ public class Assets {
 	
 	//inactive buttons
 	public static Texture playBtnImg;
+	public static Texture guideBtnImg;
 	public static Texture resumeBtnImg;
 	public static Texture exitBtnImg;
+	public static Texture pauseBtnImg;
+	
 	public static Sprite playBtnSprite;
+	public static Sprite guideBtnSprite;
 	public static Sprite resumeBtnSprite;
 	public static Sprite exitBtnSprite;
+	public static Sprite pauseBtnSprite;
 	
 	//active buttons
 	public static Texture playActiveBtnImg;
+	public static Texture guideActiveBtnImg;
 	public static Texture resumeActiveBtnImg;
 	public static Texture exitActiveBtnImg;
+	public static Texture pauseActiveBtnImg;
+	
 	public static Sprite playActiveBtnSprite;
+	public static Sprite guideActiveBtnSprite;
 	public static Sprite resumeActiveBtnSprite;
 	public static Sprite exitActiveBtnSprite;
+	public static Sprite pauseActiveBtnSprite;
 	
 	//background
 	public static Texture bgImage;
 	public static Sprite bgSprite;
 	
+	//how-to-play guide
+	public static Texture guideImg;
+	public static Sprite guideSprite;	
+	
 	//dark layer on pause
 	public static Texture darkAlphaImg;
 	public static Sprite darkAlphaSprite;
-	
-	//background objects
-	public static Texture treeImage;
-	public static Sprite treeSprite;
-	public static Texture cloudImage;
-	public static Sprite cloudSprite;
 	
 	//player character
 	public static Texture coconutImage;
@@ -75,13 +85,15 @@ public class Assets {
 	
 	public static void load() {
 		
+		title = new Texture(Gdx.files.internal("Title.png"));
+		
 		Preferences saveFile = Gdx.app.getPreferences("CocorunSave");
 		highscore = saveFile.getInteger("highscore", 0);
 		
 		/*
 		 * Configures the font we'll be using
 		 */
-		FreeTypeFontGenerator gen = new FreeTypeFontGenerator(Gdx.files.internal("Fonts/Montserrat-Regular.ttf"));
+		FreeTypeFontGenerator gen = new FreeTypeFontGenerator(Gdx.files.internal("Fonts/Impacted.ttf"));
 		FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
 		parameter.size = 32;
 		parameter.color = Color.valueOf("ffffff");
@@ -102,41 +114,57 @@ public class Assets {
 		/*
 		 * loads inactive buttons
 		 */
-		playBtnImg = new Texture(Gdx.files.internal("Buttons/play.png"));
+		playBtnImg = new Texture(Gdx.files.internal("Buttons/play_inactive.png"));
 		playBtnImg.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		playBtnSprite = new Sprite(playBtnImg);
 		
-		exitBtnImg = new Texture(Gdx.files.internal("Buttons/exit.png"));
+		guideBtnImg = new Texture(Gdx.files.internal("Buttons/guide_inactive.png"));
+		guideBtnImg.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+		guideBtnSprite = new Sprite(guideBtnImg);
+		
+		exitBtnImg = new Texture(Gdx.files.internal("Buttons/exit_inactive.png"));
 		exitBtnImg.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		exitBtnSprite = new Sprite(exitBtnImg);
 		
-		resumeBtnImg = new Texture(Gdx.files.internal("Buttons/resume.png"));
+		resumeBtnImg = new Texture(Gdx.files.internal("Buttons/resume_inactive.png"));
 		resumeBtnImg.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		resumeBtnSprite = new Sprite(resumeBtnImg);
+		
+		pauseBtnImg = new Texture(Gdx.files.internal("Buttons/pause_inactive.png"));
+		pauseBtnImg.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+		pauseBtnSprite = new Sprite(pauseBtnImg);
 		
 		
 		/*
 		 * loads active buttons
 		 */
-		playActiveBtnImg = new Texture(Gdx.files.internal("Buttons/playActive.png"));
+		playActiveBtnImg = new Texture(Gdx.files.internal("Buttons/play_active.png"));
 		playActiveBtnImg.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		playActiveBtnSprite = new Sprite(playActiveBtnImg);
 		
-		exitActiveBtnImg = new Texture(Gdx.files.internal("Buttons/exitActive.png"));
+		guideActiveBtnImg = new Texture(Gdx.files.internal("Buttons/guide_active.png"));
+		guideActiveBtnImg.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+		guideActiveBtnSprite = new Sprite(guideActiveBtnImg);
+		
+		exitActiveBtnImg = new Texture(Gdx.files.internal("Buttons/exit_active.png"));
 		exitActiveBtnImg.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		exitActiveBtnSprite = new Sprite(exitActiveBtnImg);
 		
-		resumeActiveBtnImg = new Texture(Gdx.files.internal("Buttons/resumeActive.png"));
+		resumeActiveBtnImg = new Texture(Gdx.files.internal("Buttons/resume_active.png"));
 		resumeActiveBtnImg.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		resumeActiveBtnSprite = new Sprite(resumeActiveBtnImg);
+
+		pauseActiveBtnImg = new Texture(Gdx.files.internal("Buttons/pause_active.png"));
+		pauseActiveBtnImg.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+		pauseActiveBtnSprite = new Sprite(pauseActiveBtnImg);
 
 		
 		/*
 		 * loads background image for in-game view
 		 */
-		bgImage = new Texture(Gdx.files.internal("background-cocorun.png"));
+		bgImage = new Texture(Gdx.files.internal("Backgrounds/background_with_items.png"));
 		//used so that the image isn't messed up when scaling
-		//bgImage.setFilter(TextureFilter.Linear, TextureFilter.Linear );	
+		bgImage.setFilter(TextureFilter.Linear, TextureFilter.Linear );	
 		//converts the texture into a sprite which helps load faster
 		bgSprite = new Sprite(bgImage);
 		
@@ -144,15 +172,22 @@ public class Assets {
 		/*
 		 * loads a darkened layer for pause screen
 		 */
-		darkAlphaImg = new Texture(Gdx.files.internal("black-alpha.png"));
+		darkAlphaImg = new Texture(Gdx.files.internal("Backgrounds/black-alpha.png"));
 		darkAlphaImg.setFilter(TextureFilter.Linear, TextureFilter.Linear );	
 		darkAlphaSprite = new Sprite(darkAlphaImg);
+		
+		/*
+		 * loads how-to-play guide window image
+		 */
+		guideImg = new Texture(Gdx.files.internal("Backgrounds/guide.png"));
+		guideImg.setFilter(TextureFilter.Linear, TextureFilter.Linear );
+		guideSprite = new Sprite(guideImg);
 		
 		
 		/*
 		 * loads player textures and sprite
 		 */
-		coconutImage = new Texture(Gdx.files.internal("Player/cursed_angy.png"));
+		coconutImage = new Texture(Gdx.files.internal("Player/cursed.png"));
 		coconutImage.setFilter(TextureFilter.Linear, TextureFilter.Linear );	
 		coconutSprite = new Sprite(coconutImage);
 		
@@ -172,17 +207,6 @@ public class Assets {
 		potholeImage.setFilter(TextureFilter.Linear, TextureFilter.Linear );	
 		potholeSprite = new Sprite(potholeImage);
 		
-		
-		/*
-		 * loads background textures and sprite
-		 */
-		treeImage = new Texture(Gdx.files.internal("tree128px.png"));
-		treeImage.setFilter(TextureFilter.Linear, TextureFilter.Linear );	
-		treeSprite = new Sprite(treeImage);
-		
-		cloudImage = new Texture(Gdx.files.internal("Cloud.png"));
-		cloudImage.setFilter(TextureFilter.Linear, TextureFilter.Linear );	
-		cloudSprite = new Sprite(cloudImage);
 	}
 	
 }

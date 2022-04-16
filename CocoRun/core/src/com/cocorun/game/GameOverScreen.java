@@ -70,6 +70,8 @@ public class GameOverScreen implements Screen {
 		batch.setProjectionMatrix(camera.combined);
 		
 		batch.begin();
+				batch.draw(Assets.bgSprite, 0, 0);
+		
 				float btnX = (camera.viewportWidth / 2 - CocoRunGame.BTN_WIDTH / 2);
 				float playBtnY = (float)(camera.viewportHeight * 0.4);
 				float exitBtnY = (float)(camera.viewportHeight * 0.2);

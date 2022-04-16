@@ -65,7 +65,7 @@ public class GameScreen implements Screen {
 		viewport.setCamera(camera);
 		
 		//configure lane coordinates based on window size
-		topLane = (int)(camera.viewportHeight*0.4);
+		topLane = (int)(camera.viewportHeight*0.37);
 		midLane = (int)(camera.viewportHeight*0.2) + 10;
 		botLane = 15; 
 		
@@ -138,6 +138,19 @@ public class GameScreen implements Screen {
 				}
 				batch.draw(coconut.getSprite(), coconut.getX(), coconut.getY());
 				Assets.font.draw(batch, "Points earned: " + points, 10, camera.viewportHeight - 30);
+				
+				float pauseBtnX = (camera.viewportWidth - 130);
+				float pauseBtnY = (camera.viewportHeight - 130);
+				if (Gdx.input.getX() < pauseBtnX + CocoRunGame.BTN_WIDTH && Gdx.input.getX() > pauseBtnX && camera.viewportHeight - Gdx.input.getY() < pauseBtnY + CocoRunGame.BTN_HEIGHT &&  camera.viewportHeight - Gdx.input.getY() > pauseBtnY) {
+					batch.draw(Assets.pauseActiveBtnSprite, pauseBtnX, pauseBtnY, 128, 128);
+					if(Gdx.input.justTouched()) {
+						Assets.btnPressSFX.play();
+						paused = true;
+					}
+				} else {
+					batch.draw(Assets.pauseBtnSprite, pauseBtnX, pauseBtnY, 128, 128);
+				}
+				
 				
 				if(paused) {
 					batch.draw(Assets.darkAlphaSprite, 0, 0);

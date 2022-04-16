@@ -35,6 +35,8 @@ public class MainMenuScreen implements Screen {
 	private int midLane; 
 	private int botLane;
 	
+	private boolean guidePopUp;
+	
 	//randomizer setup
 	private Random rand = new Random();
 	
@@ -62,8 +64,10 @@ public class MainMenuScreen implements Screen {
 		
 		batch = new SpriteBatch();
 		
+		guidePopUp = false;
+		
 		//configure lane coordinates based on window size
-		topLane = (int)(camera.viewportHeight*0.4);
+		topLane = (int)(camera.viewportHeight*0.37);
 		midLane = (int)(camera.viewportHeight*0.2) + 10;
 		botLane = 15; 
 		
@@ -103,6 +107,12 @@ public class MainMenuScreen implements Screen {
 		
 		camera.update();
 		
+		if(guidePopUp) {
+			if(Gdx.input.isKeyJustPressed(Keys.ESCAPE)) {
+				Assets.btnPressSFX.play();
+				guidePopUp = false;
+			}
+		}
 		backgroundUpdate();
 		
 		//resizes the SpriteBatch to the screen size we set it, in this case 1920 x 1080
@@ -111,19 +121,17 @@ public class MainMenuScreen implements Screen {
 		//starts drawing the SpriteBatch into the canvas
 		batch.begin();
 		
-				//batch.draw(Assets.bgSprite, 0, 0, viewport.getWorldWidth(), viewport.getWorldHeight());
-				//batch.draw(Assets.treeSprite, 10, viewport.getWorldHeight() / 2 + 5);
-				
 				game.scrollingBackground.updateAndRender(delta, batch);
 		
 				for (Obstacle obstacle : obstacles) {
 					batch.draw(obstacle.getSprite(), obstacle.getX(), obstacle.getY());
 				}
 				
-				GlyphLayout gameTitleLayout = new GlyphLayout(Assets.font, "Run, Coco! Run!", Color.BLACK, 0, Align.center, false);
-				GlyphLayout highScoreLayout = new GlyphLayout(Assets.font, "Highscore: " + highscore, Color.BLACK, 0, Align.center, false);
-				Assets.font.draw(batch, gameTitleLayout, camera.viewportWidth / 2, (float)(camera.viewportHeight * 0.8));
-				Assets.font.draw(batch, highScoreLayout, camera.viewportWidth / 2 , (float)(camera.viewportHeight * 0.8) - 32);
+				batch.draw(Assets.title, camera.viewportWidth / 2  - Assets.title.getWidth() / 2, (float)(camera.viewportHeight * 0.65));
+				//GlyphLayout gameTitleLayout = new GlyphLayout(Assets.font, "Run, Coco! Run!", Color.BLACK, 0, Align.center, false);
+				GlyphLayout highScoreLayout = new GlyphLayout(Assets.font, "Highscore: " + highscore, Color.valueOf("02cb18"), 0, Align.center, false);
+				//Assets.font.draw(batch, gameTitleLayout, camera.viewportWidth / 2, (float)(camera.viewportHeight * 0.8));
+				Assets.font.draw(batch, highScoreLayout, camera.viewportWidth / 2 , (float)(camera.viewportHeight * 0.7) - 32);
 				
 				/*
 				 * configures x-coordinates of all button to center of screen
@@ -131,8 +139,10 @@ public class MainMenuScreen implements Screen {
 				 */
 				float btnX = (camera.viewportWidth / 2 - CocoRunGame.BTN_WIDTH / 2);
 				float playBtnY = (float)(camera.viewportHeight * 0.4);
-				float exitBtnY = (float)(camera.viewportHeight * 0.2);
+				float guideBtnY = (float)(camera.viewportHeight * 0.25);
+				float exitBtnY = (float)(camera.viewportHeight * 0.1);
 				
+				//configure button placement and user input
 				if (Gdx.input.getX() < btnX + CocoRunGame.BTN_WIDTH && Gdx.input.getX() > btnX && camera.viewportHeight - Gdx.input.getY() < playBtnY + CocoRunGame.BTN_HEIGHT &&  camera.viewportHeight - Gdx.input.getY() > playBtnY) {
 					batch.draw(Assets.playActiveBtnSprite, btnX, playBtnY, CocoRunGame.BTN_WIDTH, CocoRunGame.BTN_HEIGHT);
 					if(Gdx.input.justTouched()) {
@@ -144,20 +154,44 @@ public class MainMenuScreen implements Screen {
 					batch.draw(Assets.playBtnSprite, btnX, playBtnY, CocoRunGame.BTN_WIDTH, CocoRunGame.BTN_HEIGHT);
 				}
 				
-				if (Gdx.input.getX() < btnX + CocoRunGame.BTN_WIDTH && Gdx.input.getX() > btnX && camera.viewportHeight - Gdx.input.getY() < exitBtnY + CocoRunGame.BTN_HEIGHT &&  camera.viewportHeight - Gdx.input.getY() > exitBtnY) {
-					batch.draw(Assets.exitActiveBtnSprite, btnX, exitBtnY, CocoRunGame.BTN_WIDTH, CocoRunGame.BTN_HEIGHT);
+				if (Gdx.input.getX() < btnX + CocoRunGame.BTN_WIDTH && Gdx.input.getX() > btnX && camera.viewportHeight - Gdx.input.getY() < guideBtnY + CocoRunGame.BTN_HEIGHT &&  camera.viewportHeight - Gdx.input.getY() > guideBtnY) {
+					batch.draw(Assets.guideActiveBtnSprite, btnX, guideBtnY, CocoRunGame.BTN_WIDTH, CocoRunGame.BTN_HEIGHT);
 					if(Gdx.input.justTouched()) {
 						Assets.btnPressSFX.play();
-						try {
-							Thread.sleep(500);
-							dispose();
-							System.exit(1);
-						} catch (Exception e) {
-							System.out.println(e);
-						}
+						guidePopUp = true;
 					}
 				} else {
-					batch.draw(Assets.exitBtnSprite, btnX, exitBtnY, CocoRunGame.BTN_WIDTH, CocoRunGame.BTN_HEIGHT);
+					batch.draw(Assets.guideBtnSprite, btnX, guideBtnY, CocoRunGame.BTN_WIDTH, CocoRunGame.BTN_HEIGHT);
+				}
+				
+				if(guidePopUp) {
+					batch.draw(Assets.guideSprite, 0, 50, camera.viewportWidth, camera.viewportHeight);
+					if (Gdx.input.getX() < btnX + CocoRunGame.BTN_WIDTH && Gdx.input.getX() > btnX && camera.viewportHeight - Gdx.input.getY() < exitBtnY + CocoRunGame.BTN_HEIGHT &&  camera.viewportHeight - Gdx.input.getY() > exitBtnY) {
+						batch.draw(Assets.exitActiveBtnSprite, btnX, exitBtnY, CocoRunGame.BTN_WIDTH, CocoRunGame.BTN_HEIGHT);
+						if(Gdx.input.justTouched()) {
+							Assets.btnPressSFX.play();
+							guidePopUp = false;
+						}
+					} else {
+						batch.draw(Assets.exitBtnSprite, btnX, exitBtnY, CocoRunGame.BTN_WIDTH, CocoRunGame.BTN_HEIGHT);
+					}
+				} else {
+					if (Gdx.input.getX() < btnX + CocoRunGame.BTN_WIDTH && Gdx.input.getX() > btnX && camera.viewportHeight - Gdx.input.getY() < exitBtnY + CocoRunGame.BTN_HEIGHT &&  camera.viewportHeight - Gdx.input.getY() > exitBtnY) {
+						batch.draw(Assets.exitActiveBtnSprite, btnX, exitBtnY, CocoRunGame.BTN_WIDTH, CocoRunGame.BTN_HEIGHT);
+						if(Gdx.input.justTouched()) {
+							Assets.btnPressSFX.play();
+							try {
+								Thread.sleep(500);
+								dispose();
+								System.exit(1);
+							} catch (Exception e) {
+								System.out.println(e);
+							}
+						}
+					} else {
+						batch.draw(Assets.exitBtnSprite, btnX, exitBtnY, CocoRunGame.BTN_WIDTH, CocoRunGame.BTN_HEIGHT);
+					}
+					
 				}
 			
 		batch.end();
