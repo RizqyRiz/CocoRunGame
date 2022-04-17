@@ -7,7 +7,6 @@ import java.util.Random;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -25,7 +24,7 @@ public class MainMenuScreen implements Screen {
 	private OrthographicCamera camera;
 	private SpriteBatch batch;
 	private Viewport viewport;
-	private long highscore;
+	private int highscore;
 	
 	private Obstacle obstacle;
 	private List<Obstacle> obstacles;
@@ -194,9 +193,6 @@ public class MainMenuScreen implements Screen {
 				}
 			
 		batch.end();
-		
-		if (Gdx.input.isKeyJustPressed(Keys.SPACE)) {
-		}
 		
 	}
 	

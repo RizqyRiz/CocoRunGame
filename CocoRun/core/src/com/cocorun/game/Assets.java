@@ -19,70 +19,70 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 
 public class Assets {
 	//game title
-	public static Texture title;
+	protected static Texture title;
 	
 	//save handling
 	protected static Preferences saveFile;
-	public static int highscore;
+	protected static int highscore;
 	
 	//font setup
-	public static BitmapFont font;
+	protected static BitmapFont font;
 	
 	//sounds
-	public static Music BGM;
-	public static Music btnPressSFX;
-	public static Music collisionSFX;
-	public static Music pausePopupSFX;
+	protected static Music BGM;
+	protected static Music btnPressSFX;
+	protected static Music collisionSFX;
+	protected static Music pausePopupSFX;
 	
 	//inactive buttons
-	public static Texture playBtnImg;
-	public static Texture guideBtnImg;
-	public static Texture resumeBtnImg;
-	public static Texture exitBtnImg;
-	public static Texture pauseBtnImg;
+	protected static Texture playBtnImg;
+	protected static Texture guideBtnImg;
+	protected static Texture resumeBtnImg;
+	protected static Texture exitBtnImg;
+	protected static Texture pauseBtnImg;
 	
-	public static Sprite playBtnSprite;
-	public static Sprite guideBtnSprite;
-	public static Sprite resumeBtnSprite;
-	public static Sprite exitBtnSprite;
-	public static Sprite pauseBtnSprite;
+	protected static Sprite playBtnSprite;
+	protected static Sprite guideBtnSprite;
+	protected static Sprite resumeBtnSprite;
+	protected static Sprite exitBtnSprite;
+	protected static Sprite pauseBtnSprite;
 	
 	//active buttons
-	public static Texture playActiveBtnImg;
-	public static Texture guideActiveBtnImg;
-	public static Texture resumeActiveBtnImg;
-	public static Texture exitActiveBtnImg;
-	public static Texture pauseActiveBtnImg;
+	protected static Texture playActiveBtnImg;
+	protected static Texture guideActiveBtnImg;
+	protected static Texture resumeActiveBtnImg;
+	protected static Texture exitActiveBtnImg;
+	protected static Texture pauseActiveBtnImg;
 	
-	public static Sprite playActiveBtnSprite;
-	public static Sprite guideActiveBtnSprite;
-	public static Sprite resumeActiveBtnSprite;
-	public static Sprite exitActiveBtnSprite;
-	public static Sprite pauseActiveBtnSprite;
+	protected static Sprite playActiveBtnSprite;
+	protected static Sprite guideActiveBtnSprite;
+	protected static Sprite resumeActiveBtnSprite;
+	protected static Sprite exitActiveBtnSprite;
+	protected static Sprite pauseActiveBtnSprite;
 	
 	//background
-	public static Texture bgImage;
-	public static Sprite bgSprite;
+	protected static Texture bgImage;
+	protected static Sprite bgSprite;
 	
 	//how-to-play guide
-	public static Texture guideImg;
-	public static Sprite guideSprite;	
+	protected static Texture guideImg;
+	protected static Sprite guideSprite;	
 	
 	//dark layer on pause
-	public static Texture darkAlphaImg;
-	public static Sprite darkAlphaSprite;
+	protected static Texture darkAlphaImg;
+	protected static Sprite darkAlphaSprite;
 	
 	//player character
-	public static Texture coconutImage;
-	public static Sprite coconutSprite;
+	protected static Texture coconutImage;
+	protected static Sprite coconutSprite;
 	
 	//obstacles
-	public static Texture carImage;
-	public static Sprite carSprite;
-	public static Texture boulderImage;
-	public static Sprite boulderSprite;
-	public static Texture potholeImage;
-	public static Sprite potholeSprite;
+	protected static Texture carImage;
+	protected static Sprite carSprite;
+	protected static Texture boulderImage;
+	protected static Sprite boulderSprite;
+	protected static Texture potholeImage;
+	protected static Sprite potholeSprite;
 	
 	public static void load() {
 		
